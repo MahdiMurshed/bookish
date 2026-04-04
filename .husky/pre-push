@@ -1,3 +1,2 @@
-pnpm biome format --write .
-pnpm biome check --fix .
+pnpm biome check .
 pnpm build --filter web
