@@ -36,7 +36,5 @@
       "biome format --write --no-errors-on-unmatched"
     ]
   },
-  "dependencies": {
-    "lucide-react": "^0.552.0"
-  }
+  "dependencies": {}
 }
