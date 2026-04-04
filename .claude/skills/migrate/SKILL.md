@@ -101,3 +101,9 @@ MIGRATION COMPLETE:
 - Each migration should be idempotent where possible (use IF NOT EXISTS, CREATE OR REPLACE)
 - `.supabase-migrations-applied` is gitignored (local tracking only, each developer tracks their own state)
 - If a migration fails, STOP immediately and show the error. Do not continue with subsequent migrations.
+- Do NOT record a failed migration in `.supabase-migrations-applied`. Only record successful ones.
+- If a migration fails partially (some statements succeeded, some failed), warn the user:
+  "Migration {filename} partially failed. You may need to manually clean up in the Supabase
+  SQL Editor before retrying. Check which tables/columns were created and drop them if needed."
+- Offer rollback guidance: show the user which tables/functions/policies were created by the
+  failed migration so they know what to clean up manually.

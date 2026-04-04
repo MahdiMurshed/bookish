@@ -84,30 +84,40 @@ When starting a new phase:
 
 When completing the current phase:
 
-1. **Verify build passes:**
+1. **Check for uncommitted changes:**
+   ```bash
+   git status --porcelain
+   ```
+   If there are uncommitted changes, STOP and ask the user:
+   "You have uncommitted changes. Commit them before marking the phase complete?"
+   - A) Commit all changes with a descriptive message, then continue
+   - B) Abort — I'll clean up manually
+   Do not mark a phase complete with uncommitted work.
+
+2. **Verify build passes:**
    ```bash
    pnpm build --filter web
    pnpm lint
    ```
    If either fails, show the error and stop.
 
-2. **Update PROGRESS.md:**
+3. **Update PROGRESS.md:**
    - Check off the completed phase: `[x]`
    - Update status line with deliverables summary
    - Note the branch and commit range
 
-3. **Commit the update:**
+4. **Commit the update:**
    ```bash
    git add PROGRESS.md
    git commit -m "chore: complete phase {N} - {title}"
    ```
 
-4. **Push the branch:**
+5. **Push the branch:**
    ```bash
    git push origin phase-{N}/{name}
    ```
 
-5. **Show next steps:**
+6. **Show next steps:**
    ```
    PHASE {N} COMPLETE: {Title}
    Branch: phase-{N}/{name}
