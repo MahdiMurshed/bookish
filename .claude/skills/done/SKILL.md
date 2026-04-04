@@ -37,6 +37,15 @@ Wrap up the current session and save context for the next one.
 
    ### Open issues
    - {any unresolved problems, failing tests, or pending decisions}
+
+   ### Prompt for next session
+   > {A ready-to-paste prompt the user can send in the next chat to continue
+   > exactly where this session left off. Be specific: include the phase,
+   > branch, exact task to start with, and any context the next session
+   > needs. Example: "I'm on branch phase-2/books. Continue Phase 2 by
+   > building the books CRUD in api-client/src/books.ts and the Google
+   > Books search in api-client/src/bookSearch.ts. Run /pickup first to
+   > see full context."}
    ```
 
 4. **Commit the session log:**

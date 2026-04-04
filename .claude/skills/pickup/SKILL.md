@@ -51,6 +51,9 @@ Show what happened last session and where to pick up.
 
    ⚠ Uncommitted work: {yes/no — list files if yes}
    ⚠ Stashed work: {yes/no — list stashes if yes}
+
+   💬 Suggested prompt from last session:
+   > {show the "Prompt for next session" from session-log.md if it exists}
    ══════════════════════════════════
    ```
 
@@ -59,10 +62,14 @@ Show what happened last session and where to pick up.
 
 6. **Ask what to do:**
 
+   If a "Prompt for next session" exists in the session log, use it as
+   the default option:
+
    Use AskUserQuestion:
-   > "Ready to continue. What would you like to do?"
+   > "Ready to continue. Last session suggested this prompt:"
+   > "{the prompt from session log}"
 
    Options (show only applicable ones):
-   - A) Continue where I left off — {describe what's next}
+   - A) Run that prompt — pick up exactly where I left off
    - B) Start next phase (run /phase)
    - C) Something else — I'll tell you what I need
