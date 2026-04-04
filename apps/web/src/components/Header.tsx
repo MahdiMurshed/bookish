@@ -1,7 +1,7 @@
 import { ArrowRightLeft, BookOpen, Library, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function Header() {
   const { user, signOut } = useAuth();

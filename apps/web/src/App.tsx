@@ -1,11 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { Header } from './components/Header';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { ResetPassword } from './pages/ResetPassword';
-import { SignIn } from './pages/SignIn';
-import { SignUp } from './pages/SignUp';
+import { Header } from '@/components/Header';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { ResetPassword } from '@/pages/ResetPassword';
+import { SignIn } from '@/pages/SignIn';
+import { SignUp } from '@/pages/SignUp';
 
 import '@repo/ui/styles/globals.css';
 
