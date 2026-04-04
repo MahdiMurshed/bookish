@@ -119,8 +119,8 @@ CREATE TRIGGER set_books_updated_at
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.users (id, email)
-  VALUES (NEW.id, NEW.email);
+  INSERT INTO public.users (id, email, display_name)
+  VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'name');
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
