@@ -30,6 +30,7 @@ supabase/migrations/   → SQL migrations (run with /migrate or manually in Supa
 - **Never import Supabase directly in apps.** All calls go through `@repo/api-client`.
 - Each resource gets its own file: `books.ts`, `auth.ts`, `borrowRequests.ts`, etc.
 - Functions throw on error (not return error objects).
+- **When writing api-client functions, use the Supabase MCP skill** (`/supabase` or the `mcp__plugin_supabase_supabase` tools) to verify correct query syntax, RLS behavior, and Supabase JS SDK usage. The Supabase skill knows the current SDK API and can validate queries against the actual schema.
 
 ### Components
 - Max ~150 lines per component.
