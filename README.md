@@ -10,7 +10,7 @@ A book lending platform for friends and book clubs. Add your books, mark them as
 - **Backend:** Supabase (PostgreSQL, Auth, Realtime)
 - **Data Fetching:** TanStack Query
 - **Forms:** React Hook Form + Zod
-- **Monorepo:** Turborepo + pnpm
+- **Monorepo:** Turborepo + pnpm 
 
 ## Getting Started
 
