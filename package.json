@@ -6,6 +6,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:local": "open -a Docker && echo 'Waiting for Docker...' && until docker info >/dev/null 2>&1; do sleep 1; done && echo 'Docker ready' && supabase start && turbo dev",
     "dev:web": "turbo dev --filter web",
     "typecheck": "turbo check-types",
     "lint": "biome check .",
