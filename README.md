@@ -2,6 +2,8 @@
 
 A book lending platform for friends and book clubs. Add your books, mark them as lendable, and borrow from each other.
 
+**Live:** https://bookish-mauve-beta.vercel.app/
+
 ## Tech Stack
 
 - **Frontend:** React 19, TypeScript, Vite 7, TailwindCSS 4, shadcn/ui

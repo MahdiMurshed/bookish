@@ -23,7 +23,7 @@ Reference codebase: `../bookshare` (patterns only, not code)
 - Home landing page included
 
 ## Current Status
-**Phase 1 COMPLETE.** Ready for review before Phase 2.
+**Phase 1 COMPLETE and DEPLOYED.** Live at https://bookish-mauve-beta.vercel.app/
 
 ### Phase 1 Deliverables
 - Turborepo monorepo with pnpm workspaces
