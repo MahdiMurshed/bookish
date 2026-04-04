@@ -85,6 +85,10 @@ CREATE TABLE public.notifications (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Constraints
+ALTER TABLE reviews ADD CONSTRAINT reviews_unique_per_borrow
+  UNIQUE (reviewer_id, borrow_request_id);
+
 -- Indexes
 CREATE INDEX idx_books_owner ON books(owner_id);
 CREATE INDEX idx_books_lendable ON books(is_lendable) WHERE is_lendable = true;
@@ -205,7 +209,10 @@ CREATE POLICY books_insert ON books FOR INSERT WITH CHECK (owner_id = auth.uid()
 CREATE POLICY books_update ON books FOR UPDATE USING (owner_id = auth.uid());
 CREATE POLICY books_delete ON books FOR DELETE USING (owner_id = auth.uid());
 
-CREATE POLICY borrow_select ON borrow_requests FOR SELECT USING (auth.uid() IS NOT NULL);
+CREATE POLICY borrow_select ON borrow_requests FOR SELECT USING (
+  requester_id = auth.uid()
+  OR book_id IN (SELECT id FROM books WHERE owner_id = auth.uid())
+);
 CREATE POLICY borrow_insert ON borrow_requests FOR INSERT WITH CHECK (
   requester_id = auth.uid()
   AND book_id NOT IN (SELECT id FROM books WHERE owner_id = auth.uid())
