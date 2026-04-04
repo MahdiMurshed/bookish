@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { signIn, resetPassword } from "@repo/api-client";
+import { resetPassword, signIn } from '@repo/api-client';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function SignIn() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -17,9 +17,9 @@ export function SignIn() {
 
     try {
       await signIn({ email, password });
-      navigate("/browse");
+      navigate('/browse');
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to sign in");
+      setError(err instanceof Error ? err.message : 'Failed to sign in');
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ export function SignIn() {
 
   const handleForgotPassword = async () => {
     if (!email) {
-      setError("Enter your email first, then click forgot password");
+      setError('Enter your email first, then click forgot password');
       return;
     }
     if (loading) return;
@@ -37,7 +37,7 @@ export function SignIn() {
       await resetPassword(email);
       setResetSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send reset email");
+      setError(err instanceof Error ? err.message : 'Failed to send reset email');
     } finally {
       setLoading(false);
     }
@@ -58,9 +58,7 @@ export function SignIn() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
-          </div>
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
         )}
 
         <div className="space-y-2">
@@ -98,12 +96,13 @@ export function SignIn() {
           disabled={loading}
           className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
 
       <div className="flex items-center justify-between text-sm">
         <button
+          type="button"
           onClick={handleForgotPassword}
           className="text-muted-foreground hover:text-foreground"
         >

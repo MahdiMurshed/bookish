@@ -9,14 +9,12 @@
     "./schemas/*": "./src/schemas/*.ts"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "typescript": "^5.9.3"
   }

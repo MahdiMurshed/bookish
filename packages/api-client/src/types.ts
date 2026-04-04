@@ -3,16 +3,16 @@
  * These types represent the database schema and are shared across all apps
  */
 
-export {
-  BOOK_CONDITIONS,
-  BORROW_REQUEST_STATUSES,
-  BOOK_GENRES,
-  NOTIFICATION_TYPES,
-} from '@repo/shared';
 export type {
   BookCondition,
   BorrowRequestStatus,
   NotificationType,
+} from '@repo/shared';
+export {
+  BOOK_CONDITIONS,
+  BOOK_GENRES,
+  BORROW_REQUEST_STATUSES,
+  NOTIFICATION_TYPES,
 } from '@repo/shared';
 
 import type { BookCondition, BorrowRequestStatus, NotificationType } from '@repo/shared';

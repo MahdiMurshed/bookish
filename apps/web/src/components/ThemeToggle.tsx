@@ -1,12 +1,13 @@
-import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      type="button"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       className="relative rounded-md p-2 text-muted-foreground hover:text-foreground"
       aria-label="Toggle theme"
     >

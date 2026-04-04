@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "next-themes";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { Header } from "./components/Header";
-import { SignIn } from "./pages/SignIn";
-import { SignUp } from "./pages/SignUp";
-import { ResetPassword } from "./pages/ResetPassword";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Header } from './components/Header';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ResetPassword } from './pages/ResetPassword';
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
 
-import "@repo/ui/styles/globals.css";
+import '@repo/ui/styles/globals.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -88,7 +88,9 @@ function App() {
                   path="/browse"
                   element={
                     <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">Browse page coming in Phase 2</div>
+                      <div className="text-center text-muted-foreground">
+                        Browse page coming in Phase 2
+                      </div>
                     </ProtectedRoute>
                   }
                 />
@@ -96,7 +98,9 @@ function App() {
                   path="/my-library"
                   element={
                     <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">My Library coming in Phase 2</div>
+                      <div className="text-center text-muted-foreground">
+                        My Library coming in Phase 2
+                      </div>
                     </ProtectedRoute>
                   }
                 />
@@ -104,7 +108,9 @@ function App() {
                   path="/requests"
                   element={
                     <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">Requests coming in Phase 3</div>
+                      <div className="text-center text-muted-foreground">
+                        Requests coming in Phase 3
+                      </div>
                     </ProtectedRoute>
                   }
                 />
@@ -112,7 +118,9 @@ function App() {
                   path="/profile"
                   element={
                     <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">Profile coming in Phase 4</div>
+                      <div className="text-center text-muted-foreground">
+                        Profile coming in Phase 4
+                      </div>
                     </ProtectedRoute>
                   }
                 />

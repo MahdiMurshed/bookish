@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import type { AuthUser } from "@repo/api-client";
-import { onAuthStateChange, signOut } from "@repo/api-client";
+import type { AuthUser } from '@repo/api-client';
+import { onAuthStateChange, signOut } from '@repo/api-client';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

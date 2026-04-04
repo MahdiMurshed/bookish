@@ -4,7 +4,6 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
     "ui": "pnpm dlx shadcn@latest add"
   },
   "dependencies": {
@@ -30,7 +29,6 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^24.9.2",

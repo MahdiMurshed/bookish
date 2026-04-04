@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { signUp } from "@repo/api-client";
+import { signUp } from '@repo/api-client';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function SignUp() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,7 @@ export function SignUp() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
@@ -24,9 +24,9 @@ export function SignUp() {
 
     try {
       await signUp({ email, password, name });
-      navigate("/browse");
+      navigate('/browse');
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to sign up");
+      setError(err instanceof Error ? err.message : 'Failed to sign up');
     } finally {
       setLoading(false);
     }
@@ -41,9 +41,7 @@ export function SignUp() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
-          </div>
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
         )}
 
         <div className="space-y-2">
@@ -111,12 +109,12 @@ export function SignUp() {
           disabled={loading}
           className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
         >
-          {loading ? "Creating account..." : "Sign Up"}
+          {loading ? 'Creating account...' : 'Sign Up'}
         </button>
       </form>
 
       <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
+        Already have an account?{' '}
         <Link to="/signin" className="text-primary hover:underline">
           Sign in
         </Link>

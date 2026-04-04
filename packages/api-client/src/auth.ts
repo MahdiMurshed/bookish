@@ -6,7 +6,7 @@
  */
 
 import { supabase } from './supabaseClient.js';
-import type { SignUpCredentials, SignInCredentials, AuthUser, Session } from './types.js';
+import type { AuthUser, Session, SignInCredentials, SignUpCredentials } from './types.js';
 
 export async function signUp(credentials: SignUpCredentials) {
   const { data, error } = await supabase.auth.signUp({
@@ -70,20 +70,23 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 }
 
 export function onAuthStateChange(callback: (user: AuthUser | null, event?: string) => void) {
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    (event, session) => {
-      if (!session?.user) {
-        callback(null, event);
-        return;
-      }
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((event, session) => {
+    if (!session?.user) {
+      callback(null, event);
+      return;
+    }
 
-      callback({
+    callback(
+      {
         id: session.user.id,
         email: session.user.email ?? '',
         user_metadata: session.user.user_metadata,
-      }, event);
-    }
-  );
+      },
+      event,
+    );
+  });
 
   return () => {
     subscription.unsubscribe();
