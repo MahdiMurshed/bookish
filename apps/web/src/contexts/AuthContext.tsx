@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { AuthUser, getCurrentUser, onAuthStateChange, signOut } from "@repo/api-client";
+import type { AuthUser } from "@repo/api-client";
+import { onAuthStateChange, signOut } from "@repo/api-client";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -16,19 +17,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let isMounted = true;
 
-    getCurrentUser()
-      .then((currentUser) => {
-        if (isMounted) setUser(currentUser);
-      })
-      .catch(() => {
-        if (isMounted) setUser(null);
-      })
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
-
-    const unsubscribe = onAuthStateChange((user) => {
-      if (isMounted) setUser(user);
+    // Single source of truth: onAuthStateChange fires INITIAL_SESSION on mount
+    const unsubscribe = onAuthStateChange((authUser) => {
+      if (isMounted) {
+        setUser(authUser);
+        setLoading(false);
+      }
     });
 
     return () => {
