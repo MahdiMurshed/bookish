@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { updatePassword } from "@repo/api-client";
+import { updatePassword, onAuthStateChange } from "@repo/api-client";
 
 export function ResetPassword() {
   const navigate = useNavigate();
@@ -9,6 +9,25 @@ export function ResetPassword() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [hasRecoverySession, setHasRecoverySession] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((_user, event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setHasRecoverySession(true);
+      }
+      setChecking(false);
+    });
+
+    // Timeout: if no recovery event fires within 3s, show error
+    const timeout = setTimeout(() => setChecking(false), 3000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +54,30 @@ export function ResetPassword() {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="mx-auto max-w-md py-12 text-center text-muted-foreground">
+        Verifying reset link...
+      </div>
+    );
+  }
+
+  if (!hasRecoverySession) {
+    return (
+      <div className="mx-auto max-w-md space-y-4 py-12">
+        <h1 className="text-center text-2xl font-bold">Invalid Reset Link</h1>
+        <p className="text-center text-muted-foreground">
+          This link has expired or is invalid. Request a new password reset from the sign in page.
+        </p>
+        <p className="text-center">
+          <Link to="/signin" className="text-primary hover:underline">
+            Back to sign in
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-md space-y-6">

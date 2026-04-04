@@ -69,11 +69,11 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   };
 }
 
-export function onAuthStateChange(callback: (user: AuthUser | null) => void) {
+export function onAuthStateChange(callback: (user: AuthUser | null, event?: string) => void) {
   const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    (_event: string, session: { user?: { id: string; email?: string; user_metadata?: Record<string, unknown> } } | null) => {
+    (event, session) => {
       if (!session?.user) {
-        callback(null);
+        callback(null, event);
         return;
       }
 
@@ -81,7 +81,7 @@ export function onAuthStateChange(callback: (user: AuthUser | null) => void) {
         id: session.user.id,
         email: session.user.email ?? '',
         user_metadata: session.user.user_metadata,
-      });
+      }, event);
     }
   );
 
