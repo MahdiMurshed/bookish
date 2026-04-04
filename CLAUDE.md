@@ -90,10 +90,6 @@ Framework: Vitest. Tests in `packages/api-client/src/__tests__/`.
 3. Run `git log --oneline -10` for recent commits
 4. Announce what you see: "Last session: [summary]. Current phase: [phase]. Picking up from [where]."
 
-**Before ending a session:**
-The user will run `/done` which updates `.claude/session-log.md`, commits, and pushes.
-If the user says "goodbye", "I'm done", or signals they're wrapping up without running `/done`, remind them: "Run `/done` to save session context for next time."
-
 ## Reference
 
 The existing app at `../bookshare` is the pattern reference. Same tech stack, same conventions, but this project is intentionally simpler.
