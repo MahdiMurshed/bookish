@@ -83,6 +83,37 @@ pnpm --filter @repo/api-client test:coverage  # with coverage
 
 Framework: Vitest. Tests in `packages/api-client/src/__tests__/`.
 
+## Session Continuity
+
+**On every new session start:**
+1. Read `PROGRESS.md` for phase status
+2. Read `.claude/session-log.md` for what the last session did
+3. Run `git log --oneline -10` for recent commits
+4. Announce what you see: "Last session: [summary]. Current phase: [phase]. Picking up from [where]."
+
+**Before ending a session (when the user says goodbye, closes the chat, or you finish a task):**
+1. Update `.claude/session-log.md` with what was accomplished this session
+2. Update `PROGRESS.md` if phase status changed
+
+### Session Log Format (`.claude/session-log.md`)
+
+```markdown
+## Last Session — {YYYY-MM-DD}
+Branch: {branch name}
+Phase: {current phase}
+
+### What was done
+- {bullet points of what was accomplished}
+
+### What's next
+- {what should be done next}
+
+### Open issues
+- {any unresolved problems or decisions}
+```
+
+Overwrite the file each session (only the most recent matters, git log has the history).
+
 ## Reference
 
 The existing app at `../bookshare` is the pattern reference. Same tech stack, same conventions, but this project is intentionally simpler.
