@@ -20,9 +20,8 @@ apps/web/              → React 19 + Vite 7 + TypeScript
 packages/api-client/   → Supabase abstraction layer (all DB calls go through here)
 packages/shared/       → Zod schemas, constants, types
 packages/ui/           → shadcn/ui components + Tailwind CSS 4
-packages/eslint-config/
 packages/typescript-config/
-supabase/migrations/   → SQL migrations (run manually in Supabase SQL Editor)
+supabase/migrations/   → SQL migrations (run with /migrate or manually in Supabase SQL Editor)
 ```
 
 ## Rules
@@ -91,28 +90,9 @@ Framework: Vitest. Tests in `packages/api-client/src/__tests__/`.
 3. Run `git log --oneline -10` for recent commits
 4. Announce what you see: "Last session: [summary]. Current phase: [phase]. Picking up from [where]."
 
-**Before ending a session (when the user says goodbye, closes the chat, or you finish a task):**
-1. Update `.claude/session-log.md` with what was accomplished this session
-2. Update `PROGRESS.md` if phase status changed
-
-### Session Log Format (`.claude/session-log.md`)
-
-```markdown
-## Last Session — {YYYY-MM-DD}
-Branch: {branch name}
-Phase: {current phase}
-
-### What was done
-- {bullet points of what was accomplished}
-
-### What's next
-- {what should be done next}
-
-### Open issues
-- {any unresolved problems or decisions}
-```
-
-Overwrite the file each session (only the most recent matters, git log has the history).
+**Before ending a session:**
+The user will run `/done` which updates `.claude/session-log.md`, commits, and pushes.
+If the user says "goodbye", "I'm done", or signals they're wrapping up without running `/done`, remind them: "Run `/done` to save session context for next time."
 
 ## Reference
 
