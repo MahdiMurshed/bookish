@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Header } from '@/components/Header';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ResetPassword } from '@/pages/ResetPassword';
@@ -56,80 +57,82 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AuthProvider>
-            <Header />
-            <main className="container mx-auto px-4 py-8">
-              <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<Navigate to="/browse" replace />} />
-                <Route
-                  path="/signin"
-                  element={
-                    <PublicRoute>
-                      <SignIn />
-                    </PublicRoute>
-                  }
-                />
-                <Route
-                  path="/signup"
-                  element={
-                    <PublicRoute>
-                      <SignUp />
-                    </PublicRoute>
-                  }
-                />
-                <Route path="/reset-password" element={<ResetPassword />} />
+    <ErrorBoundary>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <AuthProvider>
+              <Header />
+              <main className="container mx-auto px-4 py-8">
+                <Routes>
+                  {/* Public routes */}
+                  <Route path="/" element={<Navigate to="/browse" replace />} />
+                  <Route
+                    path="/signin"
+                    element={
+                      <PublicRoute>
+                        <SignIn />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route
+                    path="/signup"
+                    element={
+                      <PublicRoute>
+                        <SignUp />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route path="/reset-password" element={<ResetPassword />} />
 
-                {/* Protected routes (Phase 2+) */}
-                <Route
-                  path="/browse"
-                  element={
-                    <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">
-                        Browse page coming in Phase 2
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/my-library"
-                  element={
-                    <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">
-                        My Library coming in Phase 2
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/requests"
-                  element={
-                    <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">
-                        Requests coming in Phase 3
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <div className="text-center text-muted-foreground">
-                        Profile coming in Phase 4
-                      </div>
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </main>
-          </AuthProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ThemeProvider>
+                  {/* Protected routes (Phase 2+) */}
+                  <Route
+                    path="/browse"
+                    element={
+                      <ProtectedRoute>
+                        <div className="text-center text-muted-foreground">
+                          Browse page coming in Phase 2
+                        </div>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/my-library"
+                    element={
+                      <ProtectedRoute>
+                        <div className="text-center text-muted-foreground">
+                          My Library coming in Phase 2
+                        </div>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/requests"
+                    element={
+                      <ProtectedRoute>
+                        <div className="text-center text-muted-foreground">
+                          Requests coming in Phase 3
+                        </div>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectedRoute>
+                        <div className="text-center text-muted-foreground">
+                          Profile coming in Phase 4
+                        </div>
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </main>
+            </AuthProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
