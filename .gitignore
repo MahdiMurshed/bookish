@@ -8,3 +8,4 @@ dist/
 .vite/
 .gstack/
 .vercel/
+.supabase-migrations-applied
