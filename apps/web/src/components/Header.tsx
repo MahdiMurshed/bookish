@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import { ThemeToggle } from "./ThemeToggle";
-import { BookOpen, Library, ArrowRightLeft, User } from "lucide-react";
+import { ArrowRightLeft, BookOpen, Library, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -9,7 +9,7 @@ export function Header() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/signin");
+    navigate('/signin');
   };
 
   return (
@@ -53,6 +53,7 @@ export function Header() {
               </Link>
               <ThemeToggle />
               <button
+                type="button"
                 onClick={handleSignOut}
                 className="text-sm text-muted-foreground hover:text-foreground"
               >
@@ -62,10 +63,7 @@ export function Header() {
           ) : (
             <>
               <ThemeToggle />
-              <Link
-                to="/signin"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
+              <Link to="/signin" className="text-sm text-muted-foreground hover:text-foreground">
                 Sign In
               </Link>
               <Link

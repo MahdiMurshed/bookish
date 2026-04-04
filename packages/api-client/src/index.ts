@@ -1,39 +1,39 @@
 // Auth
 export {
-  signUp,
-  signIn,
-  signOut,
-  getSession,
   getCurrentUser,
+  getSession,
   onAuthStateChange,
   resetPassword,
+  signIn,
+  signOut,
+  signUp,
   updatePassword,
 } from './auth.js';
 
 // Types
 export type {
-  User,
-  Book,
-  BorrowRequest,
-  Message,
-  Review,
-  Notification,
   AuthUser,
-  Session,
-  SignUpCredentials,
-  SignInCredentials,
-  CreateBookInput,
-  UpdateBookInput,
-  BookWithOwner,
-  BorrowRequestWithDetails,
+  Book,
   BookCondition,
+  BookWithOwner,
+  BorrowRequest,
   BorrowRequestStatus,
+  BorrowRequestWithDetails,
+  CreateBookInput,
+  Message,
+  Notification,
   NotificationType,
+  Review,
+  Session,
+  SignInCredentials,
+  SignUpCredentials,
+  UpdateBookInput,
+  User,
 } from './types.js';
 
 export {
   BOOK_CONDITIONS,
-  BORROW_REQUEST_STATUSES,
   BOOK_GENRES,
+  BORROW_REQUEST_STATUSES,
   NOTIFICATION_TYPES,
 } from './types.js';

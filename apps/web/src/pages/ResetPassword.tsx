@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { updatePassword, onAuthStateChange } from "@repo/api-client";
+import { onAuthStateChange, updatePassword } from '@repo/api-client';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function ResetPassword() {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -14,7 +14,7 @@ export function ResetPassword() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChange((_user, event) => {
-      if (event === "PASSWORD_RECOVERY") {
+      if (event === 'PASSWORD_RECOVERY') {
         setHasRecoverySession(true);
       }
       setChecking(false);
@@ -34,12 +34,12 @@ export function ResetPassword() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError('Password must be at least 6 characters');
       return;
     }
 
@@ -47,9 +47,9 @@ export function ResetPassword() {
     try {
       await updatePassword(password);
       setSuccess(true);
-      setTimeout(() => navigate("/signin"), 2000);
+      setTimeout(() => navigate('/signin'), 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update password");
+      setError(err instanceof Error ? err.message : 'Failed to update password');
     } finally {
       setLoading(false);
     }
@@ -93,9 +93,7 @@ export function ResetPassword() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
-            </div>
+            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
           )}
 
           <div className="space-y-2">
@@ -134,7 +132,7 @@ export function ResetPassword() {
             disabled={loading}
             className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
-            {loading ? "Updating..." : "Update Password"}
+            {loading ? 'Updating...' : 'Update Password'}
           </button>
         </form>
       )}
