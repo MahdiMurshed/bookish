@@ -1,8 +1,5 @@
 # BookShare V2 — Build Progress
 
-Plan: `~/.claude/plans/frolicking-snuggling-swing.md`
-Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054643.md`
-Reference codebase: `../bookshare` (patterns only, not code)
 
 ## Phases
 

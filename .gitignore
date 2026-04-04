@@ -9,3 +9,4 @@ dist/
 .gstack/
 .vercel/
 .supabase-migrations-applied
+.claude/session-log.md
