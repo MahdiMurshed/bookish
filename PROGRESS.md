@@ -22,7 +22,7 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 2 COMPLETE.** Branch: phase-2/books-and-bookshelf (PR #5)
+**Phase 3 IN PROGRESS.** Working on Borrowing.
 
 ### Phase 2 Deliverables
 - api-client: books.ts (CRUD, getUserBooks, getAvailableBooks with owner join)
