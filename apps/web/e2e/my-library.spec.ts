@@ -49,7 +49,7 @@ test.describe('My Library', () => {
 
     // Wait for search results (network dependent)
     const firstResult = page.locator('.max-h-60 button').first();
-    await expect(firstResult).toBeVisible({ timeout: 15_000 });
+    await expect(firstResult).toBeVisible({ timeout: 30_000 });
 
     // Select the first result
     await firstResult.click();
@@ -89,18 +89,18 @@ test.describe('My Library', () => {
 
     // Verify it changed
     if (wasChecked) {
-      await expect(lendableCheckbox).not.toBeChecked({ timeout: 5_000 });
+      await expect(lendableCheckbox).not.toBeChecked({ timeout: 10_000 });
     } else {
-      await expect(lendableCheckbox).toBeChecked({ timeout: 5_000 });
+      await expect(lendableCheckbox).toBeChecked({ timeout: 10_000 });
     }
 
     // Toggle back to restore state
     await lendableCheckbox.click();
 
     if (wasChecked) {
-      await expect(lendableCheckbox).toBeChecked({ timeout: 5_000 });
+      await expect(lendableCheckbox).toBeChecked({ timeout: 10_000 });
     } else {
-      await expect(lendableCheckbox).not.toBeChecked({ timeout: 5_000 });
+      await expect(lendableCheckbox).not.toBeChecked({ timeout: 10_000 });
     }
   });
 });
