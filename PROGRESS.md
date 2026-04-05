@@ -7,7 +7,7 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 
 - [x] **Phase 1: Scaffold + Auth** — Turborepo init, packages config, Supabase migration (6 tables + RLS + triggers), auth (signUp/signIn/signOut/resetPassword), AuthContext, ProtectedRoute/PublicRoute, SignIn/SignUp/ResetPassword pages, Header + dark mode
 - [x] **Phase 2: Books + Bookshelf** — api-client books CRUD + Google Books search, shared schemas, useBooks hooks, MyLibrary page, Browse page, BookCard/BookGrid/AddBookForm
-- [ ] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
+- [x] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
 - [ ] **Phase 4: Social** — per-request chat (messages), reviews, profile page, Home landing page with stats
 - [ ] **Phase 5: Polish + Deploy** — responsive design, loading/error/empty states, auth error handler, book delete guard, Vercel deploy, CLAUDE.md
 
@@ -22,7 +22,22 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 3 IN PROGRESS.** Working on Borrowing.
+**Phase 3 COMPLETE.** Branch: phase-3/borrowing (PR #6)
+
+### Phase 3 Deliverables
+- api-client: borrowRequests.ts (create, approve, deny, cancel, handOver, markReturned, getIncoming/Outgoing, duplicate prevention)
+- api-client: notifications.ts (get, getUnreadCount, markRead, markAllRead, Realtime subscribe)
+- hooks: useBorrowRequests (7 hooks with key factory), useNotifications (5 hooks + Realtime subscription)
+- pages: BookDetail (/books/:id with cover, metadata, borrow request form, active request status, error feedback)
+- pages: Requests (shadcn Tabs for incoming/outgoing, pending count badge)
+- components: BorrowRequestCard (Badge status, book thumbnail, request actions)
+- components: BorrowRequestForm (react-hook-form + Zod, success message)
+- components: RequestActions (approve/deny intent tracking, hand over, mark returned, cancel)
+- Header: unread notification badge on Requests link, Realtime subscription
+- shadcn/ui: installed Button, Badge, Tabs, Input, Textarea, Label components
+- E2E: mocked Google Books API, increased CI timeouts, pre-push hook runs tests
+- PR template: scope/deferred sections for Claude bot reviewer context
+- Two rounds of PR review fixes addressed
 
 ### Phase 2 Deliverables
 - api-client: books.ts (CRUD, getUserBooks, getAvailableBooks with owner join)
