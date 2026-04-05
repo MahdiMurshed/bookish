@@ -1,13 +1,15 @@
+import { Badge } from '@repo/ui/components/badge';
 import { ArrowRightLeft, BookOpen, Library, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNotificationSubscription } from '@/hooks/useNotifications';
+import { useNotificationSubscription, useUnreadCount } from '@/hooks/useNotifications';
 
 export function Header() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   useNotificationSubscription();
+  const { data: unreadCount } = useUnreadCount();
 
   const handleSignOut = async () => {
     await signOut();
@@ -45,6 +47,9 @@ export function Header() {
               >
                 <ArrowRightLeft className="h-4 w-4" />
                 Requests
+                {!!unreadCount && (
+                  <Badge className="ml-0.5 h-4 min-w-4 px-1 text-[10px]">{unreadCount}</Badge>
+                )}
               </Link>
               <Link
                 to="/profile"
