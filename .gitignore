@@ -10,4 +10,5 @@ dist/
 .vercel/
 .supabase-migrations-applied
 .claude/session-log.md
+.claude/test-credentials.json
 apps/web/.env.prod
