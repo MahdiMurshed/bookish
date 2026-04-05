@@ -5,7 +5,7 @@ import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { Textarea } from '@repo/ui/components/textarea';
-import { Send } from 'lucide-react';
+import { Check, Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { useCreateBorrowRequest } from '@/hooks/useBorrowRequests';
@@ -45,6 +45,13 @@ export function BorrowRequestForm({ bookId }: BorrowRequestFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 rounded-lg border bg-card p-4">
       <h3 className="font-medium">Request to Borrow</h3>
+
+      {createRequest.isSuccess && (
+        <div className="flex items-center gap-2 rounded-md bg-success/15 p-3 text-sm text-success-foreground">
+          <Check className="h-4 w-4" />
+          Request sent! The owner will be notified.
+        </div>
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="borrow-message">Message to owner (optional)</Label>

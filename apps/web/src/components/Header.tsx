@@ -2,10 +2,12 @@ import { ArrowRightLeft, BookOpen, Library, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNotificationSubscription } from '@/hooks/useNotifications';
 
 export function Header() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  useNotificationSubscription();
 
   const handleSignOut = async () => {
     await signOut();

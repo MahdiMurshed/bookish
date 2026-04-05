@@ -39,9 +39,7 @@ export function useOutgoingRequests() {
 
 export function useActiveRequestForBook(bookId: string | undefined) {
   return useQuery({
-    queryKey: bookId
-      ? borrowRequestKeys.activeForBook(bookId)
-      : ['borrowRequests', 'active', 'none'],
+    queryKey: borrowRequestKeys.activeForBook(bookId ?? ''),
     queryFn: () => getActiveRequestForBook(bookId!),
     enabled: !!bookId,
   });
