@@ -22,7 +22,7 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 1 COMPLETE and DEPLOYED.** Live at https://bookish-mauve-beta.vercel.app/
+**Phase 2 IN PROGRESS.** Working on Books + Bookshelf.
 
 ### Phase 1 Deliverables
 - Turborepo monorepo with pnpm workspaces
