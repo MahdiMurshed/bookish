@@ -99,7 +99,23 @@ When the user runs `/pr-review address`:
    - Mark the item as `[x]` in the tasks file
 4. After all FIX items are done:
    - Push the branch
-   - Show summary: "Fixed {N} items from the review. Branch pushed."
+   - Reply to the original Claude review comment on the PR with a summary of what was addressed:
+     ```bash
+     gh pr comment {number} --body "## Review fixes applied
+
+     {For each FIX item:}
+     - ✅ **{description}** — {what was done} ({commit SHA})
+
+     {For each DEFER item:}
+     - ⏳ **{description}** — deferred: {reason}
+
+     {For each SKIP item:}
+     - ⏭️ **{description}** — skipped: {reason}
+
+     ---
+     {N} fixed, {M} deferred, {K} skipped."
+     ```
+   - Show summary: "Fixed {N} items from the review. Branch pushed. Response posted on PR."
 
 ## Notes
 
