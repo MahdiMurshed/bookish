@@ -1,2 +1,3 @@
 pnpm biome check .
 pnpm build --filter web
+pnpm --filter web exec playwright test e2e/
