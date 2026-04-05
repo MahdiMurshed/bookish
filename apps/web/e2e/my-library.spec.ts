@@ -28,6 +28,33 @@ test.describe('My Library', () => {
   });
 
   test('adds a book via Google Books search', async ({ page }) => {
+    // Mock Google Books API to avoid external network dependency
+    await page.route('https://www.googleapis.com/**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          totalItems: 1,
+          items: [
+            {
+              id: 'mock-gatsby-id',
+              volumeInfo: {
+                title: 'The Great Gatsby',
+                authors: ['F. Scott Fitzgerald'],
+                description: 'A novel about the American dream.',
+                categories: ['Fiction'],
+                imageLinks: {
+                  thumbnail:
+                    'https://books.google.com/books/content?id=mock&printsec=frontcover&img=1&zoom=1',
+                },
+                industryIdentifiers: [{ type: 'ISBN_13', identifier: '9780743273565' }],
+              },
+            },
+          ],
+        }),
+      }),
+    );
+
     await page.goto('/my-library');
     await expect(page.getByRole('heading', { name: 'My Library' })).toBeVisible();
     await expect(page.getByText('Loading your library...')).not.toBeVisible({ timeout: 10_000 });
@@ -43,13 +70,13 @@ test.describe('My Library', () => {
     // Verify the add book form appears
     await expect(page.getByRole('heading', { name: 'Add a Book' })).toBeVisible();
 
-    // Search Google Books
+    // Search Google Books (hits mock, not real API)
     await page.getByLabel('Search Google Books').fill('The Great Gatsby');
     await page.getByRole('button', { name: 'Search' }).click();
 
-    // Wait for search results (network dependent)
+    // Wait for search results
     const firstResult = page.locator('.max-h-60 button').first();
-    await expect(firstResult).toBeVisible({ timeout: 30_000 });
+    await expect(firstResult).toBeVisible({ timeout: 10_000 });
 
     // Select the first result
     await firstResult.click();
