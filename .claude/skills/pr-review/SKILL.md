@@ -91,11 +91,12 @@ Generated from Claude GitHub review on {date}
 - {description} — {reason for skipping}
 ```
 
-6. Notify user: "Review triaged. {N} items to fix, {M} deferred, {K} skipped. Run `/pr-review address` to start fixing."
+6. Notify user: "Review triaged. {N} items to fix, {M} deferred, {K} skipped. Fixing now."
+7. **Automatically proceed to Step 5.** Do NOT wait for the user to run `/pr-review address`.
 
-### Step 5: Address review (`/pr-review address`)
+### Step 5: Address review
 
-When the user runs `/pr-review address`:
+This step runs automatically after triage, or manually via `/pr-review address`:
 
 1. Find the most recent task file: `.claude/pr-reviews/pr-*-tasks.md`
 2. Read it and show the FIX items
