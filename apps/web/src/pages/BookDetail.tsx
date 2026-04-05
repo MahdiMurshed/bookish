@@ -82,6 +82,14 @@ export default function BookDetail() {
             </div>
           )}
 
+          {activeRequestError && !activeRequest && (
+            <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-4">
+              <p className="text-sm text-destructive">
+                Could not check your request status. Please refresh the page.
+              </p>
+            </div>
+          )}
+
           {canRequest && <BorrowRequestForm bookId={book.id} />}
 
           {isOwner && (

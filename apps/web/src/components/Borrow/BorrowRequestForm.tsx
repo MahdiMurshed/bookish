@@ -25,7 +25,6 @@ export function BorrowRequestForm({ bookId }: BorrowRequestFormProps) {
   } = useForm<CreateBorrowRequestFormValues>({
     resolver: zodResolver(createBorrowRequestSchema),
     defaultValues: {
-      book_id: bookId,
       message: '',
       due_date: '',
     },
@@ -34,7 +33,7 @@ export function BorrowRequestForm({ bookId }: BorrowRequestFormProps) {
   const onSubmit = (data: CreateBorrowRequestFormValues) => {
     createRequest.mutate(
       {
-        book_id: data.book_id,
+        book_id: bookId,
         message: data.message || undefined,
         due_date: data.due_date || undefined,
       },
