@@ -4,6 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Header } from '@/components/Header';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import Browse from '@/pages/Browse';
+import MyLibrary from '@/pages/MyLibrary';
 import { ResetPassword } from '@/pages/ResetPassword';
 import { SignIn } from '@/pages/SignIn';
 import { SignUp } from '@/pages/SignUp';
@@ -85,14 +87,12 @@ function App() {
                   />
                   <Route path="/reset-password" element={<ResetPassword />} />
 
-                  {/* Protected routes (Phase 2+) */}
+                  {/* Protected routes */}
                   <Route
                     path="/browse"
                     element={
                       <ProtectedRoute>
-                        <div className="text-center text-muted-foreground">
-                          Browse page coming in Phase 2
-                        </div>
+                        <Browse />
                       </ProtectedRoute>
                     }
                   />
@@ -100,9 +100,7 @@ function App() {
                     path="/my-library"
                     element={
                       <ProtectedRoute>
-                        <div className="text-center text-muted-foreground">
-                          My Library coming in Phase 2
-                        </div>
+                        <MyLibrary />
                       </ProtectedRoute>
                     }
                   />

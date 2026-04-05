@@ -9,6 +9,20 @@ export {
   signUp,
   updatePassword,
 } from './auth.js';
+export type { BookSearchResult } from './bookSearch.js';
+// Book Search
+export { mapCategoryToGenre, searchBooks } from './bookSearch.js';
+export type { BookFilters } from './books.js';
+// Books
+export {
+  createBook,
+  deleteBook,
+  getAvailableBooks,
+  getBook,
+  getBooks,
+  getUserBooks,
+  updateBook,
+} from './books.js';
 
 // Types
 export type {
