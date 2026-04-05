@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { BookFilters } from '@/components/Books/BookFilters';
 import { BookGrid } from '@/components/Books/BookGrid';
 import { useAvailableBooks } from '@/hooks/useBooks';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export default function Browse() {
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
 
   const filters = {
-    ...(search && { search }),
+    ...(debouncedSearch && { search: debouncedSearch }),
     ...(genre && { genre }),
   };
 

@@ -22,6 +22,7 @@ export function BookFilters({ search, genre, onSearchChange, onGenreChange }: Bo
         />
       </div>
       <select
+        aria-label="Filter by genre"
         value={genre}
         onChange={(e) => onGenreChange(e.target.value)}
         className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
