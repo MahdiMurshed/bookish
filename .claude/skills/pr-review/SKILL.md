@@ -11,12 +11,18 @@ Push, create PR, trigger Claude GitHub review, and triage the results.
 ## Usage
 
 - `/pr-review` — push current branch, create PR, trigger review, poll in background
+- `/pr-review https://github.com/.../pull/5` — use existing PR, trigger review on it
 - `/pr-review address` — read the saved review task list and fix issues one by one
 
 ## Steps
 
-### Step 1: Push and create PR
+### Step 1: Determine PR
 
+**If a PR URL or number is given** (e.g. `/pr-review https://github.com/.../pull/5` or `/pr-review 5`):
+Extract the PR number from the URL or argument. Use that PR directly. Skip push and creation.
+
+**If no argument given:**
+Push the current branch and find or create a PR:
 ```bash
 git push origin $(git branch --show-current)
 ```
