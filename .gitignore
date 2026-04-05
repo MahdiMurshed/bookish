@@ -12,3 +12,5 @@ dist/
 .claude/session-log.md
 .claude/test-credentials.json
 apps/web/.env.prod
+apps/web/test-results/
+apps/web/playwright-report/
