@@ -6,7 +6,10 @@
       "Bash(gh api:*)",
       "Bash(gh pr:*)",
       "Write(.claude/pr-reviews/**)",
-      "Edit(.claude/pr-reviews/**)"
+      "Edit(.claude/pr-reviews/**)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(git push:*)"
     ]
   }
 }
