@@ -6,7 +6,7 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 ## Phases
 
 - [x] **Phase 1: Scaffold + Auth** — Turborepo init, packages config, Supabase migration (6 tables + RLS + triggers), auth (signUp/signIn/signOut/resetPassword), AuthContext, ProtectedRoute/PublicRoute, SignIn/SignUp/ResetPassword pages, Header + dark mode
-- [ ] **Phase 2: Books + Bookshelf** — api-client books CRUD + Google Books search, shared schemas, useBooks hooks, MyLibrary page, Browse page, BookCard/BookGrid/AddBookForm
+- [x] **Phase 2: Books + Bookshelf** — api-client books CRUD + Google Books search, shared schemas, useBooks hooks, MyLibrary page, Browse page, BookCard/BookGrid/AddBookForm
 - [ ] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
 - [ ] **Phase 4: Social** — per-request chat (messages), reviews, profile page, Home landing page with stats
 - [ ] **Phase 5: Polish + Deploy** — responsive design, loading/error/empty states, auth error handler, book delete guard, Vercel deploy, CLAUDE.md
@@ -22,7 +22,17 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 2 IN PROGRESS.** Working on Books + Bookshelf.
+**Phase 2 COMPLETE.** Branch: phase-2/books-and-bookshelf (PR #5)
+
+### Phase 2 Deliverables
+- api-client: books.ts (CRUD, getUserBooks, getAvailableBooks with owner join)
+- api-client: bookSearch.ts (Google Books API search, genre mapping, HTTPS fix, optional API key)
+- hooks: useBooks.ts (6 hooks with TanStack Query key factory), useDebounce.ts
+- pages: MyLibrary (add/edit/delete books, toggle lendable, error feedback), Browse (community grid with debounced search + genre filter)
+- components: BookCard, BookGrid, BookFilters, AddBookForm (Google Books search + manual entry)
+- E2E tests: 6 Playwright tests (auth, browse, my-library)
+- CI pipeline: GitHub Actions (lint + build + Supabase + Playwright)
+- Two rounds of PR review fixes addressed
 
 ### Phase 1 Deliverables
 - Turborepo monorepo with pnpm workspaces
