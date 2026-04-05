@@ -4,8 +4,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Header } from '@/components/Header';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import BookDetail from '@/pages/BookDetail';
 import Browse from '@/pages/Browse';
 import MyLibrary from '@/pages/MyLibrary';
+import Requests from '@/pages/Requests';
 import { ResetPassword } from '@/pages/ResetPassword';
 import { SignIn } from '@/pages/SignIn';
 import { SignUp } from '@/pages/SignUp';
@@ -100,9 +102,7 @@ function App() {
                     path="/books/:id"
                     element={
                       <ProtectedRoute>
-                        <div className="text-center text-muted-foreground">
-                          Book detail page coming in Phase 3
-                        </div>
+                        <BookDetail />
                       </ProtectedRoute>
                     }
                   />
@@ -118,9 +118,7 @@ function App() {
                     path="/requests"
                     element={
                       <ProtectedRoute>
-                        <div className="text-center text-muted-foreground">
-                          Requests coming in Phase 3
-                        </div>
+                        <Requests />
                       </ProtectedRoute>
                     }
                   />
