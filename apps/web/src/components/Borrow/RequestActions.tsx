@@ -18,7 +18,7 @@ interface RequestActionsProps {
 
 export function RequestActions({ requestId, status, role }: RequestActionsProps) {
   const [responseMessage, setResponseMessage] = useState('');
-  const [showResponse, setShowResponse] = useState(false);
+  const [action, setAction] = useState<'approve' | 'deny' | null>(null);
 
   const approve = useApproveBorrowRequest();
   const deny = useDenyBorrowRequest();
@@ -39,7 +39,7 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
     return (
       <div className="space-y-2">
         {status === 'pending' &&
-          (showResponse ? (
+          (action ? (
             <div className="space-y-2">
               <Textarea
                 value={responseMessage}
@@ -48,35 +48,34 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
                 rows={2}
               />
               <div className="flex gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  className="bg-success text-success-foreground hover:bg-success/90"
-                  onClick={() =>
-                    approve.mutate({
-                      id: requestId,
-                      input: { response_message: responseMessage },
-                    })
-                  }
-                  disabled={isLoading}
-                >
-                  Confirm Approve
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => deny.mutate({ id: requestId, message: responseMessage })}
-                  disabled={isLoading}
-                >
-                  Confirm Deny
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setShowResponse(false)}
-                >
+                {action === 'approve' && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="bg-success text-success-foreground hover:bg-success/90"
+                    onClick={() =>
+                      approve.mutate({
+                        id: requestId,
+                        input: { response_message: responseMessage },
+                      })
+                    }
+                    disabled={isLoading}
+                  >
+                    Confirm Approve
+                  </Button>
+                )}
+                {action === 'deny' && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => deny.mutate({ id: requestId, message: responseMessage })}
+                    disabled={isLoading}
+                  >
+                    Confirm Deny
+                  </Button>
+                )}
+                <Button type="button" size="sm" variant="outline" onClick={() => setAction(null)}>
                   Cancel
                 </Button>
               </div>
@@ -87,7 +86,7 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
                 type="button"
                 size="sm"
                 className="bg-success text-success-foreground hover:bg-success/90"
-                onClick={() => setShowResponse(true)}
+                onClick={() => setAction('approve')}
               >
                 Approve
               </Button>
@@ -95,7 +94,7 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
                 type="button"
                 size="sm"
                 variant="destructive"
-                onClick={() => setShowResponse(true)}
+                onClick={() => setAction('deny')}
               >
                 Deny
               </Button>

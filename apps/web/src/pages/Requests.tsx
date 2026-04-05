@@ -1,3 +1,4 @@
+import type { BorrowRequestWithDetails } from '@repo/api-client';
 import { Badge } from '@repo/ui/components/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/tabs';
 
@@ -57,7 +58,7 @@ function RequestList({
   userRole,
   emptyMessage,
 }: {
-  data: ReturnType<typeof useIncomingRequests>['data'];
+  data: BorrowRequestWithDetails[] | undefined;
   isLoading: boolean;
   error: Error | null;
   userRole: 'owner' | 'requester';

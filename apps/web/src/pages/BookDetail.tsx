@@ -11,7 +11,7 @@ export default function BookDetail() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const { data: book, isLoading, error } = useBookDetail(id);
-  const { data: activeRequest } = useActiveRequestForBook(id);
+  const { data: activeRequest, error: activeRequestError } = useActiveRequestForBook(id);
 
   if (isLoading) {
     return <div className="py-12 text-center text-muted-foreground">Loading book...</div>;
@@ -22,7 +22,7 @@ export default function BookDetail() {
   }
 
   const isOwner = user?.id === book.owner_id;
-  const canRequest = !isOwner && book.is_lendable && !activeRequest;
+  const canRequest = !isOwner && book.is_lendable && !activeRequest && !activeRequestError;
 
   return (
     <div className="mx-auto max-w-4xl">
