@@ -24,6 +24,34 @@ export {
   updateBook,
 } from './books.js';
 
+// Borrow Requests
+export type {
+  ApproveBorrowRequestInput,
+  CreateBorrowRequestInput,
+  HandOverInput,
+} from './borrowRequests.js';
+export {
+  approveBorrowRequest,
+  cancelBorrowRequest,
+  createBorrowRequest,
+  denyBorrowRequest,
+  getActiveRequestForBook,
+  getBorrowRequest,
+  getIncomingRequests,
+  getOutgoingRequests,
+  handOverBook,
+  markReturned,
+} from './borrowRequests.js';
+
+// Notifications
+export {
+  getNotifications,
+  getUnreadCount,
+  markAllNotificationsRead,
+  markNotificationRead,
+  subscribeToNotifications,
+} from './notifications.js';
+
 // Types
 export type {
   AuthUser,
