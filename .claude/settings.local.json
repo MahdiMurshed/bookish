@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh api:*)",
+      "Bash(gh pr:*)",
+      "Write(.claude/pr-reviews/**)",
+      "Edit(.claude/pr-reviews/**)"
     ]
   }
 }
