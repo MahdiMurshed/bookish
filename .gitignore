@@ -14,3 +14,4 @@ dist/
 apps/web/.env.prod
 apps/web/test-results/
 apps/web/playwright-report/
+.claude/pr-reviews/
