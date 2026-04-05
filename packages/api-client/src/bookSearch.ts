@@ -19,8 +19,11 @@ export async function searchBooks(query: string): Promise<BookSearchResult[]> {
 
   try {
     const encodedQuery = encodeURIComponent(query.trim());
+    const apiKey =
+      typeof import.meta !== 'undefined' ? import.meta.env?.VITE_GOOGLE_BOOKS_API_KEY : undefined;
+    const keyParam = apiKey ? `&key=${apiKey}` : '';
     const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodedQuery}&maxResults=10&printType=books`,
+      `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodedQuery}&maxResults=10&printType=books${keyParam}`,
     );
 
     if (!response.ok) {
@@ -46,13 +49,16 @@ export async function searchBooks(query: string): Promise<BookSearchResult[]> {
         authors: (volumeInfo.authors as string[]) || [],
         description: (volumeInfo.description as string) || undefined,
         categories: (volumeInfo.categories as string[]) || [],
-        imageUrl: imageLinks.thumbnail || imageLinks.smallThumbnail || undefined,
+        imageUrl:
+          (imageLinks.thumbnail || imageLinks.smallThumbnail || '').replace(
+            'http://',
+            'https://',
+          ) || undefined,
         isbn: identifiers?.[0]?.identifier || undefined,
       };
     });
   } catch (error) {
-    console.error('Book search error:', error);
-    return [];
+    throw error instanceof Error ? error : new Error('Book search failed');
   }
 }
 

@@ -51,7 +51,7 @@ export function useCreateBook(userId: string | undefined) {
       if (userId) {
         queryClient.invalidateQueries({ queryKey: bookKeys.list(userId) });
       }
-      queryClient.invalidateQueries({ queryKey: bookKeys.available() });
+      queryClient.invalidateQueries({ queryKey: [...bookKeys.all, 'available'] });
     },
   });
 }
@@ -66,7 +66,7 @@ export function useUpdateBook(userId: string | undefined) {
       if (userId) {
         queryClient.invalidateQueries({ queryKey: bookKeys.list(userId) });
       }
-      queryClient.invalidateQueries({ queryKey: bookKeys.available() });
+      queryClient.invalidateQueries({ queryKey: [...bookKeys.all, 'available'] });
     },
   });
 }
@@ -81,7 +81,7 @@ export function useDeleteBook(userId: string | undefined) {
         queryClient.invalidateQueries({ queryKey: bookKeys.list(userId) });
       }
       queryClient.removeQueries({ queryKey: bookKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: bookKeys.available() });
+      queryClient.invalidateQueries({ queryKey: [...bookKeys.all, 'available'] });
     },
   });
 }
