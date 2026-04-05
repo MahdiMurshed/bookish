@@ -1,4 +1,5 @@
 import type { BorrowRequestWithDetails } from '@repo/api-client';
+import { Badge } from '@repo/ui/components/badge';
 import { BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -9,13 +10,13 @@ interface BorrowRequestCardProps {
   role: 'owner' | 'requester';
 }
 
-const STATUS_STYLES: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-  approved: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  handed_over: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  returned: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  denied: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-  cancelled: 'bg-muted text-muted-foreground',
+const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  pending: 'outline',
+  approved: 'default',
+  handed_over: 'secondary',
+  returned: 'secondary',
+  denied: 'destructive',
+  cancelled: 'outline',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -32,7 +33,7 @@ export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
   const requester = request.requester;
 
   return (
-    <div className="rounded-lg border bg-card p-4">
+    <div className="rounded-lg border bg-card p-4 transition-shadow hover:shadow-sm">
       <div className="flex gap-4">
         {/* Book thumbnail */}
         <Link to={`/books/${book.id}`} className="shrink-0">
@@ -56,11 +57,9 @@ export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
               </Link>
               <p className="text-sm text-muted-foreground">{book.author}</p>
             </div>
-            <span
-              className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[request.status] || 'bg-muted'}`}
-            >
+            <Badge variant={STATUS_VARIANT[request.status] || 'outline'}>
               {STATUS_LABELS[request.status] || request.status}
-            </span>
+            </Badge>
           </div>
 
           {role === 'owner' && (
@@ -70,11 +69,13 @@ export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
           )}
 
           {request.message && (
-            <p className="text-sm italic text-muted-foreground">"{request.message}"</p>
+            <p className="text-sm italic text-muted-foreground">&ldquo;{request.message}&rdquo;</p>
           )}
 
           {request.response_message && (
-            <p className="text-sm text-muted-foreground">Response: "{request.response_message}"</p>
+            <p className="text-sm text-muted-foreground">
+              Response: &ldquo;{request.response_message}&rdquo;
+            </p>
           )}
 
           {request.due_date && (

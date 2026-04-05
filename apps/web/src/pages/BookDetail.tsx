@@ -1,5 +1,6 @@
+import { Badge } from '@repo/ui/components/badge';
 import { BookOpen } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { BorrowRequestForm } from '@/components/Borrow/BorrowRequestForm';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,19 +14,11 @@ export default function BookDetail() {
   const { data: activeRequest } = useActiveRequestForBook(id);
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-muted-foreground">Loading book...</div>
-      </div>
-    );
+    return <div className="py-12 text-center text-muted-foreground">Loading book...</div>;
   }
 
   if (error || !book) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-destructive">Book not found.</div>
-      </div>
-    );
+    return <div className="py-12 text-center text-destructive">Book not found.</div>;
   }
 
   const isOwner = user?.id === book.owner_id;
@@ -53,25 +46,17 @@ export default function BookDetail() {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {book.genre && (
-              <span className="rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-                {book.genre}
-              </span>
-            )}
+            {book.genre && <Badge variant="secondary">{book.genre}</Badge>}
             {book.condition && (
-              <span className="rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground capitalize">
+              <Badge variant="secondary" className="capitalize">
                 {book.condition}
-              </span>
+              </Badge>
             )}
-            <span
-              className={`rounded-full px-3 py-1 text-sm ${
-                book.is_lendable
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : 'bg-muted text-muted-foreground'
-              }`}
-            >
-              {book.is_lendable ? 'Available to borrow' : 'Not available'}
-            </span>
+            {book.is_lendable ? (
+              <Badge className="bg-success text-success-foreground">Available to borrow</Badge>
+            ) : (
+              <Badge variant="outline">Not available</Badge>
+            )}
           </div>
 
           {book.description && <p className="text-sm leading-relaxed">{book.description}</p>}
@@ -79,18 +64,20 @@ export default function BookDetail() {
           {book.isbn && <p className="text-xs text-muted-foreground">ISBN: {book.isbn}</p>}
 
           {/* Owner info */}
-          <div className="rounded-lg border p-4">
+          <div className="rounded-lg border bg-card p-4">
             <p className="text-sm text-muted-foreground">Owned by</p>
             <p className="font-medium">
               {isOwner ? 'You' : book.owner.display_name || book.owner.email}
             </p>
           </div>
 
-          {/* Borrow request section */}
+          {/* Active request notice */}
           {activeRequest && (
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950">
-              <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                You have a {activeRequest.status} request for this book.
+            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <p className="text-sm font-medium">
+                You have a{' '}
+                <span className="font-semibold">{activeRequest.status.replace('_', ' ')}</span>{' '}
+                request for this book.
               </p>
             </div>
           )}
@@ -98,19 +85,19 @@ export default function BookDetail() {
           {canRequest && <BorrowRequestForm bookId={book.id} />}
 
           {isOwner && (
-            <div className="rounded-lg border border-muted p-4">
+            <div className="rounded-lg border bg-card p-4">
               <p className="text-sm text-muted-foreground">
                 This is your book. Manage borrow requests from the{' '}
-                <a href="/requests" className="text-primary underline">
+                <Link to="/requests" className="text-primary underline">
                   Requests
-                </a>{' '}
+                </Link>{' '}
                 page.
               </p>
             </div>
           )}
 
           {!isOwner && !book.is_lendable && !activeRequest && (
-            <div className="rounded-lg border border-muted p-4">
+            <div className="rounded-lg border bg-card p-4">
               <p className="text-sm text-muted-foreground">
                 This book is not currently available for borrowing.
               </p>

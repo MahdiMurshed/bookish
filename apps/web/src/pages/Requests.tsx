@@ -1,79 +1,89 @@
-import { useState } from 'react';
+import { Badge } from '@repo/ui/components/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/tabs';
 
 import { BorrowRequestCard } from '@/components/Borrow/BorrowRequestCard';
 import { useIncomingRequests, useOutgoingRequests } from '@/hooks/useBorrowRequests';
 
-type Tab = 'incoming' | 'outgoing';
-
 export default function Requests() {
-  const [activeTab, setActiveTab] = useState<Tab>('incoming');
   const incoming = useIncomingRequests();
   const outgoing = useOutgoingRequests();
 
-  const requests = activeTab === 'incoming' ? incoming : outgoing;
-  const role = activeTab === 'incoming' ? 'owner' : 'requester';
+  const pendingCount = incoming.data?.filter((r) => r.status === 'pending').length ?? 0;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold">Borrow Requests</h1>
-
-      {/* Tabs */}
-      <div className="flex gap-1 rounded-lg bg-muted p-1">
-        <button
-          type="button"
-          onClick={() => setActiveTab('incoming')}
-          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-            activeTab === 'incoming'
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Incoming
-          {incoming.data && incoming.data.filter((r) => r.status === 'pending').length > 0 && (
-            <span className="ml-2 rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-              {incoming.data.filter((r) => r.status === 'pending').length}
-            </span>
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('outgoing')}
-          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-            activeTab === 'outgoing'
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Outgoing
-        </button>
+      <div>
+        <h1 className="text-2xl font-bold">Borrow Requests</h1>
+        <p className="text-muted-foreground">Manage incoming and outgoing borrow requests</p>
       </div>
 
-      {/* Content */}
-      {requests.isLoading && (
-        <div className="py-12 text-center text-muted-foreground">Loading requests...</div>
-      )}
+      <Tabs defaultValue="incoming">
+        <TabsList className="w-full">
+          <TabsTrigger value="incoming">
+            Incoming
+            {pendingCount > 0 && <Badge className="ml-1.5">{pendingCount}</Badge>}
+          </TabsTrigger>
+          <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
+        </TabsList>
 
-      {requests.error && (
-        <div className="py-12 text-center text-destructive">
-          {requests.error instanceof Error ? requests.error.message : 'Failed to load requests'}
-        </div>
-      )}
+        <TabsContent value="incoming">
+          <RequestList
+            data={incoming.data}
+            isLoading={incoming.isLoading}
+            error={incoming.error}
+            userRole="owner"
+            emptyMessage="No incoming borrow requests yet."
+          />
+        </TabsContent>
 
-      {requests.data && requests.data.length === 0 && (
-        <div className="py-12 text-center text-muted-foreground">
-          {activeTab === 'incoming'
-            ? 'No incoming borrow requests yet.'
-            : "You haven't made any borrow requests yet."}
-        </div>
-      )}
+        <TabsContent value="outgoing">
+          <RequestList
+            data={outgoing.data}
+            isLoading={outgoing.isLoading}
+            error={outgoing.error}
+            userRole="requester"
+            emptyMessage="You haven't made any borrow requests yet."
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
 
-      {requests.data && requests.data.length > 0 && (
-        <div className="space-y-3">
-          {requests.data.map((request) => (
-            <BorrowRequestCard key={request.id} request={request} role={role} />
-          ))}
-        </div>
-      )}
+function RequestList({
+  data,
+  isLoading,
+  error,
+  userRole,
+  emptyMessage,
+}: {
+  data: ReturnType<typeof useIncomingRequests>['data'];
+  isLoading: boolean;
+  error: Error | null;
+  userRole: 'owner' | 'requester';
+  emptyMessage: string;
+}) {
+  if (isLoading) {
+    return <div className="py-12 text-center text-muted-foreground">Loading requests...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="py-12 text-center text-destructive">
+        {error instanceof Error ? error.message : 'Failed to load requests'}
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return <div className="py-12 text-center text-muted-foreground">{emptyMessage}</div>;
+  }
+
+  return (
+    <div className="space-y-3 pt-4">
+      {data.map((request) => (
+        <BorrowRequestCard key={request.id} request={request} role={userRole} />
+      ))}
     </div>
   );
 }
