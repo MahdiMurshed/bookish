@@ -28,9 +28,15 @@ export function AddBookForm({ onSubmit, onCancel, loading }: AddBookFormProps) {
   const handleSearch = async () => {
     if (searchQuery.trim().length < 2) return;
     setSearching(true);
-    const results = await searchBooks(searchQuery);
-    setSearchResults(results);
-    setSearching(false);
+    try {
+      const results = await searchBooks(searchQuery);
+      setSearchResults(results);
+    } catch {
+      setSearchResults([]);
+      alert('Book search failed. Try again later.');
+    } finally {
+      setSearching(false);
+    }
   };
 
   const handleSelectBook = (result: BookSearchResult) => {

@@ -2,7 +2,7 @@ import type { CreateBookInput } from '@repo/api-client';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { AddBookForm } from '@/components/Books/AddBookForm';
-import { BookGrid } from '@/components/Books/BookGrid';
+import { BookCard } from '@/components/Books/BookCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBooks, useCreateBook, useDeleteBook, useUpdateBook } from '@/hooks/useBooks';
 
@@ -77,48 +77,31 @@ export default function MyLibrary() {
         </div>
       )}
 
-      {/* Lendable toggle + delete for each book */}
       {books.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {books.map((book) => (
             <div key={book.id} className="group relative">
-              <div className="overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-md">
-                <div className="relative aspect-[2/3] bg-muted">
-                  {book.cover_url ? (
-                    <img
-                      src={book.cover_url}
-                      alt={book.title}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-muted-foreground/40 text-xs">
-                      No cover
-                    </div>
-                  )}
-                </div>
-                <div className="p-3">
-                  <h3 className="line-clamp-2 text-sm font-medium">{book.title}</h3>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{book.author}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <label className="flex items-center gap-1.5 text-xs">
-                      <input
-                        type="checkbox"
-                        checked={book.is_lendable}
-                        onChange={() => handleToggleLendable(book.id, book.is_lendable)}
-                        className="h-3.5 w-3.5 rounded border-input"
-                      />
-                      Lendable
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(book.id)}
-                      className="text-xs text-destructive opacity-0 hover:underline group-hover:opacity-100"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
+              <BookCard book={book} />
+              <div className="absolute right-0 bottom-0 left-0 flex items-center justify-between border-t bg-card/90 px-3 py-1.5 backdrop-blur-sm">
+                <label className="flex items-center gap-1.5 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={book.is_lendable}
+                    onChange={() => handleToggleLendable(book.id, book.is_lendable)}
+                    className="h-3.5 w-3.5 rounded border-input"
+                  />
+                  Lendable
+                </label>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDelete(book.id);
+                  }}
+                  className="text-xs text-destructive opacity-0 hover:underline group-hover:opacity-100"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}

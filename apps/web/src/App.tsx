@@ -97,6 +97,16 @@ function App() {
                     }
                   />
                   <Route
+                    path="/books/:id"
+                    element={
+                      <ProtectedRoute>
+                        <div className="text-center text-muted-foreground">
+                          Book detail page coming in Phase 3
+                        </div>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
                     path="/my-library"
                     element={
                       <ProtectedRoute>
