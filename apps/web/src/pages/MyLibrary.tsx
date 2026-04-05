@@ -14,30 +14,34 @@ export default function MyLibrary() {
   const updateBook = useUpdateBook(user?.id);
 
   const [showAddForm, setShowAddForm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAddBook = async (input: CreateBookInput) => {
+    setError(null);
     try {
       await createBook.mutateAsync(input);
       setShowAddForm(false);
     } catch (err) {
-      console.error('Failed to create book:', err);
+      setError(err instanceof Error ? err.message : 'Failed to add book');
     }
   };
 
   const handleToggleLendable = async (bookId: string, currentValue: boolean) => {
+    setError(null);
     try {
       await updateBook.mutateAsync({ id: bookId, data: { is_lendable: !currentValue } });
     } catch (err) {
-      console.error('Failed to update book:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update book');
     }
   };
 
   const handleDelete = async (bookId: string) => {
     if (!confirm('Delete this book?')) return;
+    setError(null);
     try {
       await deleteBook.mutateAsync(bookId);
     } catch (err) {
-      console.error('Failed to delete book:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete book');
     }
   };
 
@@ -47,6 +51,14 @@ export default function MyLibrary() {
 
   return (
     <div className="space-y-6">
+      {error && (
+        <div className="flex items-center justify-between rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+          {error}
+          <button type="button" onClick={() => setError(null)} className="text-xs hover:underline">
+            Dismiss
+          </button>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">My Library</h1>
