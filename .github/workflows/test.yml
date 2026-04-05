@@ -52,6 +52,8 @@ jobs:
 
       - name: Install Supabase CLI
         uses: supabase/setup-cli@v1
+        with:
+          version: 2.62.10
 
       - name: Start Supabase
         run: supabase start
