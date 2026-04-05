@@ -2,11 +2,17 @@
 -- Creates test users via auth.users (which triggers handle_new_user for public.users)
 
 -- 3 test users (password: "password123" for all)
-INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, raw_user_meta_data, created_at, updated_at, aud, role)
+-- GoTrue requires all token/change string columns to be '' not NULL
+INSERT INTO auth.users (
+  id, instance_id, email, encrypted_password, email_confirmed_at,
+  raw_user_meta_data, created_at, updated_at, aud, role,
+  confirmation_token, recovery_token, email_change_token_new,
+  email_change, email_change_token_current, phone_change, phone_change_token
+)
 VALUES
-  ('a1111111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000000', 'alice@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Alice Rahman"}'::jsonb, now(), now(), 'authenticated', 'authenticated'),
-  ('b2222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000000', 'bob@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Bob Chen"}'::jsonb, now(), now(), 'authenticated', 'authenticated'),
-  ('c3333333-3333-3333-3333-333333333333', '00000000-0000-0000-0000-000000000000', 'carol@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Carol Santos"}'::jsonb, now(), now(), 'authenticated', 'authenticated');
+  ('a1111111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000000', 'alice@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Alice Rahman"}'::jsonb, now(), now(), 'authenticated', 'authenticated', '', '', '', '', '', '', ''),
+  ('b2222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000000', 'bob@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Bob Chen"}'::jsonb, now(), now(), 'authenticated', 'authenticated', '', '', '', '', '', '', ''),
+  ('c3333333-3333-3333-3333-333333333333', '00000000-0000-0000-0000-000000000000', 'carol@example.com', crypt('password123', gen_salt('bf')), now(), '{"name": "Carol Santos"}'::jsonb, now(), now(), 'authenticated', 'authenticated', '', '', '', '', '', '', '');
 
 -- Auth identities (required for login to work)
 INSERT INTO auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
