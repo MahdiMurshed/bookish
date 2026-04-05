@@ -1,3 +1,5 @@
+import { Button } from '@repo/ui/components/button';
+import { Textarea } from '@repo/ui/components/textarea';
 import { useState } from 'react';
 
 import {
@@ -39,16 +41,17 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
         {status === 'pending' &&
           (showResponse ? (
             <div className="space-y-2">
-              <textarea
+              <Textarea
                 value={responseMessage}
                 onChange={(e) => setResponseMessage(e.target.value)}
                 placeholder="Message to requester (optional)"
                 rows={2}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
               <div className="flex gap-2">
-                <button
+                <Button
                   type="button"
+                  size="sm"
+                  className="bg-success text-success-foreground hover:bg-success/90"
                   onClick={() =>
                     approve.mutate({
                       id: requestId,
@@ -56,66 +59,69 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
                     })
                   }
                   disabled={isLoading}
-                  className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
                 >
                   Confirm Approve
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  size="sm"
+                  variant="destructive"
                   onClick={() => deny.mutate({ id: requestId, message: responseMessage })}
                   disabled={isLoading}
-                  className="rounded-md bg-destructive px-3 py-1.5 text-sm font-medium text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
                 >
                   Confirm Deny
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  size="sm"
+                  variant="outline"
                   onClick={() => setShowResponse(false)}
-                  className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
             <div className="flex gap-2">
-              <button
+              <Button
                 type="button"
+                size="sm"
+                className="bg-success text-success-foreground hover:bg-success/90"
                 onClick={() => setShowResponse(true)}
-                className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700"
               >
                 Approve
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                size="sm"
+                variant="destructive"
                 onClick={() => setShowResponse(true)}
-                className="rounded-md bg-destructive px-3 py-1.5 text-sm font-medium text-destructive-foreground hover:bg-destructive/90"
               >
                 Deny
-              </button>
+              </Button>
             </div>
           ))}
 
         {status === 'approved' && (
-          <button
+          <Button
             type="button"
+            size="sm"
             onClick={() => handOver.mutate({ id: requestId })}
             disabled={isLoading}
-            className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
             {handOver.isPending ? 'Marking...' : 'Mark as Handed Over'}
-          </button>
+          </Button>
         )}
 
         {status === 'handed_over' && (
-          <button
+          <Button
             type="button"
+            size="sm"
             onClick={() => markReturned.mutate({ id: requestId })}
             disabled={isLoading}
-            className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
             {markReturned.isPending ? 'Marking...' : 'Mark as Returned'}
-          </button>
+          </Button>
         )}
 
         {error && (
@@ -131,14 +137,16 @@ export function RequestActions({ requestId, status, role }: RequestActionsProps)
   return (
     <div className="space-y-2">
       {(status === 'pending' || status === 'approved') && (
-        <button
+        <Button
           type="button"
+          size="sm"
+          variant="outline"
+          className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
           onClick={() => cancel.mutate(requestId)}
           disabled={isLoading}
-          className="rounded-md border border-destructive px-3 py-1.5 text-sm font-medium text-destructive hover:bg-destructive hover:text-destructive-foreground disabled:opacity-50"
         >
           {cancel.isPending ? 'Cancelling...' : 'Cancel Request'}
-        </button>
+        </Button>
       )}
 
       {error && (
