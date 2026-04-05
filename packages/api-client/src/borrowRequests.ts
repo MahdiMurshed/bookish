@@ -39,6 +39,19 @@ export async function createBorrowRequest(input: CreateBorrowRequestInput): Prom
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) throw new Error('Not authenticated');
 
+  // Check for existing active request to prevent duplicates
+  const { data: existing } = await supabase
+    .from('borrow_requests')
+    .select('id, status')
+    .eq('book_id', input.book_id)
+    .eq('requester_id', userData.user.id)
+    .in('status', ['pending', 'approved', 'handed_over'])
+    .maybeSingle();
+
+  if (existing) {
+    throw new Error(`You already have a ${existing.status} request for this book`);
+  }
+
   const { data, error } = await supabase
     .from('borrow_requests')
     .insert({

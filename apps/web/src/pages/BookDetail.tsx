@@ -76,7 +76,7 @@ export default function BookDetail() {
             <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
               <p className="text-sm font-medium">
                 You have a{' '}
-                <span className="font-semibold">{activeRequest.status.replace('_', ' ')}</span>{' '}
+                <span className="font-semibold">{activeRequest.status.replaceAll('_', ' ')}</span>{' '}
                 request for this book.
               </p>
             </div>
