@@ -1,27 +1,38 @@
-## What changed?
+## Phase {N}: {Title}
 
+### What this PR does
 <!-- Brief description of the changes -->
 
-## Why?
+### Scope
+<!-- What this PR implements. Be specific — list files, features, components. -->
 
-<!-- What problem does this solve? Link to issue if applicable -->
+- 
 
-## How to test
+### NOT in scope (deferred to later phases)
+<!-- List items intentionally deferred to later phases. This prevents reviewers
+     (including @claude bot) from flagging known future work as issues.
+     Copy relevant items from PROGRESS.md. -->
 
-<!-- Steps to verify this works -->
+- **Phase {N+1}:**
+- **Phase 5 (Polish):** Unit tests, responsive design, loading skeletons, error boundaries
 
-1. 
+> **For reviewers:** Do NOT flag items listed in "NOT in scope" as issues.
+> They are tracked in PROGRESS.md and will be addressed in their designated phase.
+
+### How to test
+
+1. `pnpm install && pnpm dev`
 2. 
-3. 
 
-## Checklist
+### Checklist
 
 - [ ] `pnpm lint` passes
 - [ ] `pnpm build --filter web` passes
 - [ ] Tested locally in browser
-- [ ] No console errors
-- [ ] Responsive (checked mobile viewport)
+- [ ] shadcn/ui components used (not raw HTML elements)
+- [ ] Design tokens used (no hardcoded colors)
+- [ ] Forms use react-hook-form + Zod from @repo/shared
 
-## Screenshots
+### Screenshots
 
 <!-- Before/after if UI changed, delete section if not applicable -->
