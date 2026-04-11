@@ -3,6 +3,7 @@ import { BookOpen } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 import { BorrowRequestForm } from '@/components/Borrow/BorrowRequestForm';
+import { ChatThread } from '@/components/Messages/ChatThread';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBookDetail } from '@/hooks/useBooks';
 import { useActiveRequestForBook } from '@/hooks/useBorrowRequests';
@@ -71,14 +72,17 @@ export default function BookDetail() {
             </p>
           </div>
 
-          {/* Active request notice */}
+          {/* Active request notice + chat thread */}
           {activeRequest && (
-            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
-              <p className="text-sm font-medium">
-                You have a{' '}
-                <span className="font-semibold">{activeRequest.status.replaceAll('_', ' ')}</span>{' '}
-                request for this book.
-              </p>
+            <div className="space-y-3">
+              <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                <p className="text-sm font-medium">
+                  You have a{' '}
+                  <span className="font-semibold">{activeRequest.status.replaceAll('_', ' ')}</span>{' '}
+                  request for this book.
+                </p>
+              </div>
+              <ChatThread requestId={activeRequest.id} />
             </div>
           )}
 

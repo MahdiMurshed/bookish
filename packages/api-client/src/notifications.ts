@@ -8,7 +8,30 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
 import { supabase } from './supabaseClient.js';
-import type { Notification } from './types.js';
+import type { Notification, NotificationType } from './types.js';
+
+export interface CreateNotificationInput {
+  user_id: string;
+  type: NotificationType;
+  reference_id: string;
+}
+
+/**
+ * Create a notification row directly.
+ *
+ * Borrow-status notifications are already created by a Postgres trigger
+ * (notify_borrow_status_change). Use this helper only for notifications
+ * that have no trigger — currently just `new_chat_message`.
+ */
+export async function createNotification(input: CreateNotificationInput): Promise<void> {
+  const { error } = await supabase.from('notifications').insert({
+    user_id: input.user_id,
+    type: input.type,
+    reference_id: input.reference_id,
+  });
+
+  if (error) throw error;
+}
 
 /**
  * Get all notifications for the current user, newest first.

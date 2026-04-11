@@ -43,8 +43,18 @@ export {
   markReturned,
 } from './borrowRequests.js';
 
-// Notifications
+// Messages
 export {
+  getMessagesByRequest,
+  markMessagesAsRead,
+  sendMessage,
+  subscribeToMessages,
+} from './messages.js';
+
+// Notifications
+export type { CreateNotificationInput } from './notifications.js';
+export {
+  createNotification,
   getNotifications,
   getUnreadCount,
   markAllNotificationsRead,
@@ -63,6 +73,8 @@ export type {
   BorrowRequestWithDetails,
   CreateBookInput,
   Message,
+  MessageSender,
+  MessageWithSender,
   Notification,
   NotificationType,
   Review,
