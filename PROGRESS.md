@@ -8,8 +8,9 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - [x] **Phase 1: Scaffold + Auth** — Turborepo init, packages config, Supabase migration (6 tables + RLS + triggers), auth (signUp/signIn/signOut/resetPassword), AuthContext, ProtectedRoute/PublicRoute, SignIn/SignUp/ResetPassword pages, Header + dark mode
 - [x] **Phase 2: Books + Bookshelf** — api-client books CRUD + Google Books search, shared schemas, useBooks hooks, MyLibrary page, Browse page, BookCard/BookGrid/AddBookForm
 - [x] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
-- [ ] **Phase 4: Social** — per-request chat (messages), reviews, profile page, Home landing page with stats
-- [ ] **Phase 5: Polish + Deploy** — responsive design, loading/error/empty states, auth error handler, book delete guard, Vercel deploy, CLAUDE.md
+- [x] **Phase 4: Chat** — per-request chat (messages), Realtime delivery, optimistic updates, mark-read, notifications. Reviews/profile/home moved to Phase 4.5.
+- [ ] **Phase 4.5: Reviews + Profile + Home** — reviews (create after return + getForBook), Profile page (edit + stats), Home landing page (hero + community stats)
+- [ ] **Phase 5: Polish + Deploy** — responsive design, loading/error/empty states, auth error handler, book delete guard, Vercel SPA rewrites, api-client unit tests, CLAUDE.md
 
 ## Key Decisions
 - Email/password auth (not magic link)
@@ -22,7 +23,19 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 4 IN PROGRESS.** Working on Social — per-request chat, reviews, profile, home landing. Branch: phase-4/social
+**Phase 4 COMPLETE.** Branch: phase-4/social (PR #7, all review fixes verified)
+
+### Phase 4 Deliverables (Chat)
+- api-client: messages.ts (getMessagesByRequest, sendMessage with createNotification side-effect, subscribeToMessages with refetch fallback, markMessagesAsRead) + createNotification helper on notifications.ts
+- shared: sendMessageSchema (Zod, 1-2000 chars) + ACTIVE_BORROW_STATUSES single source of truth
+- hooks: useMessages (query + optimistic mutation with rollback + Realtime subscription + in-place mark-read setQueryData)
+- components: MessageBubble + ChatThread (shadcn-styled, react-hook-form + Zod composer, Enter-to-send, auto-scroll, mark-read on mount via ref pattern)
+- BookDetail: ChatThread inline under active-request notice (requester side)
+- BorrowRequestCard: collapsible Chat toggle for active statuses (owner side)
+- migrations: 002 notification INSERT RLS policy + 003 supabase_realtime publication (also retroactively fixed Phase 3 notification subscription which had been silently no-op'ing)
+- Subscribe error logging on both messages and notifications channels
+- Two rounds of PR review: 5 fixed (realtime fallback, in-place mark-read, optimisticId sentinel, shared status constant, subscribe error handling), 2 deferred to Phase 5
+- **Scope narrowed mid-phase:** reviews, profile, home landing moved to new Phase 4.5
 
 ### Phase 3 Deliverables
 - api-client: borrowRequests.ts (create, approve, deny, cancel, handOver, markReturned, getIncoming/Outgoing, duplicate prevention)
