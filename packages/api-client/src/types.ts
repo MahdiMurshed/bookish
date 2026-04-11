@@ -72,6 +72,12 @@ export interface Message {
   created_at: string;
 }
 
+export type MessageSender = Pick<User, 'id' | 'email' | 'display_name' | 'avatar_url'>;
+
+export interface MessageWithSender extends Message {
+  sender: MessageSender;
+}
+
 export interface Review {
   id: string;
   book_id: string;

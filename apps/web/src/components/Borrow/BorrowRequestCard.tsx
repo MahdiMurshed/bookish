@@ -1,7 +1,11 @@
 import type { BorrowRequestWithDetails } from '@repo/api-client';
 import { Badge } from '@repo/ui/components/badge';
-import { BookOpen } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
+import { BookOpen, MessageSquare } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import { ChatThread } from '@/components/Messages/ChatThread';
 
 import { RequestActions } from './RequestActions';
 
@@ -28,9 +32,13 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelled',
 };
 
+const CHAT_ENABLED_STATUSES = new Set(['pending', 'approved', 'handed_over']);
+
 export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
+  const [chatOpen, setChatOpen] = useState(false);
   const book = request.book;
   const requester = request.requester;
+  const canChat = CHAT_ENABLED_STATUSES.has(request.status);
 
   return (
     <div className="rounded-lg border bg-card p-4 transition-shadow hover:shadow-sm">
@@ -89,8 +97,28 @@ export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
           </div>
 
           <RequestActions requestId={request.id} status={request.status} role={role} />
+
+          {canChat && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setChatOpen((open) => !open)}
+              aria-expanded={chatOpen}
+              aria-controls={`chat-thread-${request.id}`}
+            >
+              <MessageSquare className="h-4 w-4" />
+              {chatOpen ? 'Hide chat' : 'Open chat'}
+            </Button>
+          )}
         </div>
       </div>
+
+      {canChat && chatOpen && (
+        <div id={`chat-thread-${request.id}`} className="mt-4">
+          <ChatThread requestId={request.id} />
+        </div>
+      )}
     </div>
   );
 }
