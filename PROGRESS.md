@@ -22,7 +22,7 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 3 COMPLETE.** Branch: phase-3/borrowing (PR #6)
+**Phase 4 IN PROGRESS.** Working on Social — per-request chat, reviews, profile, home landing. Branch: phase-4/social
 
 ### Phase 3 Deliverables
 - api-client: borrowRequests.ts (create, approve, deny, cancel, handOver, markReturned, getIncoming/Outgoing, duplicate prevention)
