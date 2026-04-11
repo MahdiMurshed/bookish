@@ -9,7 +9,10 @@
       "Edit(.claude/pr-reviews/**)",
       "Bash(pnpm build:*)",
       "Bash(pnpm lint:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(mv .claude/pr-reviews/pr-7-tasks.md .claude/pr-reviews/pr-7-tasks-round-1.md)",
+      "Bash(mv .claude/pr-reviews/pr-7-review.md .claude/pr-reviews/pr-7-review-round-1.md)",
+      "Bash(ls .claude/pr-reviews/pr-7*)"
     ]
   }
 }
