@@ -5,6 +5,8 @@
  * State machine enforced by Postgres trigger (validate_borrow_transition).
  */
 
+import { ACTIVE_BORROW_STATUSES } from '@repo/shared';
+
 import { supabase } from './supabaseClient.js';
 import type { BorrowRequest, BorrowRequestWithDetails } from './types.js';
 
@@ -45,7 +47,7 @@ export async function createBorrowRequest(input: CreateBorrowRequestInput): Prom
     .select('id, status')
     .eq('book_id', input.book_id)
     .eq('requester_id', userData.user.id)
-    .in('status', ['pending', 'approved', 'handed_over'])
+    .in('status', ACTIVE_BORROW_STATUSES)
     .maybeSingle();
 
   if (existing) {
@@ -138,7 +140,7 @@ export async function getActiveRequestForBook(bookId: string): Promise<BorrowReq
     .select('*')
     .eq('book_id', bookId)
     .eq('requester_id', userData.user.id)
-    .in('status', ['pending', 'approved', 'handed_over'])
+    .in('status', ACTIVE_BORROW_STATUSES)
     .maybeSingle();
 
   if (error) throw error;

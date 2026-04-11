@@ -121,17 +121,44 @@ export function subscribeToMessages(
         filter: `borrow_request_id=eq.${requestId}`,
       },
       async (payload) => {
-        // Realtime payload doesn't include the joined sender, so refetch.
-        const { data } = await supabase
-          .from('messages')
-          .select(SENDER_SELECT)
-          .eq('id', payload.new.id)
-          .single();
+        // Realtime payload has the base row but not the joined sender. Try to
+        // fetch the joined sender, but if that fails (network blip, brief
+        // downtime) deliver the base row anyway with a placeholder sender so
+        // the recipient still sees the message in real time. The real sender
+        // joins next time the query refetches.
+        const newRow = payload.new as Message;
+        try {
+          const { data, error } = await supabase
+            .from('messages')
+            .select(SENDER_SELECT)
+            .eq('id', newRow.id)
+            .single();
 
-        if (data) onMessage(data as MessageWithSender);
+          if (error) throw error;
+          if (data) {
+            onMessage(data as MessageWithSender);
+            return;
+          }
+        } catch (refetchError) {
+          console.warn('[messages] sender refetch failed, using payload fallback:', refetchError);
+        }
+
+        onMessage({
+          ...newRow,
+          sender: {
+            id: newRow.sender_id,
+            email: '',
+            display_name: null,
+            avatar_url: null,
+          },
+        });
       },
     )
-    .subscribe();
+    .subscribe((status, err) => {
+      if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        console.error(`[messages] subscription ${status} for request ${requestId}:`, err);
+      }
+    });
 
   return () => {
     supabase.removeChannel(channel);

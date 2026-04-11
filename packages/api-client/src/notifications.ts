@@ -114,7 +114,11 @@ export function subscribeToNotifications(
         onNotification(payload.new as Notification);
       },
     )
-    .subscribe();
+    .subscribe((status, err) => {
+      if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        console.error(`[notifications] subscription ${status} for user ${userId}:`, err);
+      }
+    });
 
   return () => {
     supabase.removeChannel(channel);

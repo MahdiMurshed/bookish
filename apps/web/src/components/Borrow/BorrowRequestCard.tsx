@@ -1,4 +1,5 @@
 import type { BorrowRequestWithDetails } from '@repo/api-client';
+import { ACTIVE_BORROW_STATUSES } from '@repo/api-client';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { BookOpen, MessageSquare } from 'lucide-react';
@@ -32,7 +33,7 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: 'Cancelled',
 };
 
-const CHAT_ENABLED_STATUSES = new Set(['pending', 'approved', 'handed_over']);
+const CHAT_ENABLED_STATUSES = new Set<string>(ACTIVE_BORROW_STATUSES);
 
 export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
   const [chatOpen, setChatOpen] = useState(false);
