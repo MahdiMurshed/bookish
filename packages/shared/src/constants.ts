@@ -15,6 +15,18 @@ export const borrowRequestStatusSchema = z.enum([
 export type BorrowRequestStatus = z.infer<typeof borrowRequestStatusSchema>;
 export const BORROW_REQUEST_STATUSES = borrowRequestStatusSchema.options;
 
+/**
+ * Statuses where the borrow is "live" — duplicate request prevention applies,
+ * the requester has an active claim on the book, and chat is enabled.
+ * Single source of truth for `getActiveRequestForBook`, `createBorrowRequest`
+ * duplicate detection, and the chat-toggle render guard.
+ */
+export const ACTIVE_BORROW_STATUSES = [
+  'pending',
+  'approved',
+  'handed_over',
+] as const satisfies readonly BorrowRequestStatus[];
+
 export const BOOK_GENRES = [
   'Fiction',
   'Non-Fiction',

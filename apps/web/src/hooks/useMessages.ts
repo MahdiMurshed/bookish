@@ -25,7 +25,7 @@ export function useMessages(requestId: string | undefined) {
 
 interface SendMessageContext {
   previous: MessageWithSender[] | undefined;
-  optimisticId: string;
+  optimisticId: string | null;
 }
 
 export function useSendMessage(requestId: string | undefined) {
@@ -39,7 +39,7 @@ export function useSendMessage(requestId: string | undefined) {
     },
     onMutate: async (content) => {
       if (!requestId || !user) {
-        return { previous: undefined, optimisticId: '' };
+        return { previous: undefined, optimisticId: null };
       }
 
       const key = messageKeys.thread(requestId);
@@ -76,12 +76,13 @@ export function useSendMessage(requestId: string | undefined) {
       }
     },
     onSuccess: (newMessage, _content, context) => {
-      if (!requestId || !context?.optimisticId) return;
+      if (!requestId || context?.optimisticId == null) return;
+      const optimisticId = context.optimisticId;
 
       // Replace the optimistic row with the real one. The Realtime subscription
       // may also add it — dedupe by id.
       queryClient.setQueryData<MessageWithSender[]>(messageKeys.thread(requestId), (old) => {
-        const withoutOptimistic = (old ?? []).filter((m) => m.id !== context.optimisticId);
+        const withoutOptimistic = (old ?? []).filter((m) => m.id !== optimisticId);
         const alreadyPresent = withoutOptimistic.some((m) => m.id === newMessage.id);
         if (alreadyPresent) return withoutOptimistic;
         // Build a MessageWithSender from the returned Message + current user as sender.
@@ -131,11 +132,18 @@ export function useMessageSubscription(requestId: string | undefined) {
 
 export function useMarkMessagesRead() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: (requestId: string) => markMessagesAsRead(requestId),
     onSuccess: (_data, requestId) => {
-      queryClient.invalidateQueries({ queryKey: messageKeys.thread(requestId) });
+      // Update the cache in place — the server already flipped these rows to
+      // read: true. Avoids a refetch round-trip + "Loading messages..." flicker.
+      if (!user) return;
+      queryClient.setQueryData<MessageWithSender[]>(messageKeys.thread(requestId), (old) => {
+        if (!old) return old;
+        return old.map((m) => (m.sender_id === user.id || m.read ? m : { ...m, read: true }));
+      });
     },
   });
 }

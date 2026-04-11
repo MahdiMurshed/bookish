@@ -86,6 +86,7 @@ export type {
 } from './types.js';
 
 export {
+  ACTIVE_BORROW_STATUSES,
   BOOK_CONDITIONS,
   BOOK_GENRES,
   BORROW_REQUEST_STATUSES,
