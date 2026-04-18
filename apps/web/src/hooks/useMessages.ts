@@ -10,6 +10,9 @@ import { useEffect } from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
 
+import { notificationKeys } from './useNotifications';
+import { threadKeys } from './useThreads';
+
 export const messageKeys = {
   all: ['messages'] as const,
   thread: (requestId: string) => [...messageKeys.all, 'thread', requestId] as const,
@@ -148,8 +151,8 @@ export function useMarkMessagesRead() {
       // markMessagesAsRead now clears matching new_chat_message notifications
       // server-side too. Invalidate notifications + threads so both badges and
       // the inbox unread count refresh.
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
-      queryClient.invalidateQueries({ queryKey: ['threads'] });
+      queryClient.invalidateQueries({ queryKey: notificationKeys.all });
+      queryClient.invalidateQueries({ queryKey: threadKeys.all });
     },
   });
 }
