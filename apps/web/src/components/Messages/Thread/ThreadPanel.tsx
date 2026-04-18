@@ -6,6 +6,7 @@ import { useThread } from '@/hooks/useThreads';
 import { Composer } from './Composer';
 import { EmptyThread } from './EmptyThread';
 import { MessagesList } from './MessagesList';
+import { QuickActions } from './QuickActions';
 import { ThreadHeader } from './ThreadHeader';
 
 interface ThreadPanelProps {
@@ -50,6 +51,7 @@ export function ThreadPanel({ threadId }: ThreadPanelProps) {
   return (
     <div className="flex h-full flex-col">
       <ThreadHeader thread={thread} currentUserId={user.id} />
+      <QuickActions thread={thread} currentUserId={user.id} />
       <MessagesList thread={thread} messages={messages ?? []} currentUser={user} />
       <Composer threadId={threadId} counterpartyName={counterpartyName} />
     </div>
