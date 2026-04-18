@@ -10,15 +10,6 @@ Wrap up the current session and save context for the next one.
 
 ## Steps
 
-0. **Sync the design system reference:**
-   Invoke the `sync-design-system` skill first. It mirrors any changes
-   to `packages/ui/src/{components,styles,lib}` into the BookShare
-   Design System skill's `_reference/` snapshot and surfaces follow-up
-   suggestions.
-
-   Anything it writes will appear as uncommitted work, which Step 2
-   below will catch and prompt to commit.
-
 1. **Gather context:**
    - Read `PROGRESS.md` for current phase
    - Run `git log --oneline -10` for recent commits this session

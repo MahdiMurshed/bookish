@@ -8,7 +8,7 @@ Read the README.md file within this skill, and explore the other available files
 
 If creating visual artifacts (slides, mocks, throwaway prototypes, etc), copy assets out and create static HTML files for the user to view. Use `colors_and_type.css` for tokens and `ui_kits/web/kit.css` + `ui_kits/web/*.jsx` for components.
 
-If working on production code, you can copy assets and read the rules here to become an expert in designing with this brand. The source of truth lives in `_reference/` — verbatim imports from the MahdiMurshed/bookish repo.
+If working on production code, the source of truth is `packages/ui/src/components/*.tsx`, `packages/ui/src/styles/globals.css`, and `packages/ui/src/lib/utils.ts` in this repo — read those directly. The rules and voice guidance in README.md apply on top.
 
 Key rules:
 - Neutral achromatic palette. Color only appears as book covers, the green availability dot, success/destructive/warning semantic states.

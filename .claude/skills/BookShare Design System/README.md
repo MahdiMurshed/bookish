@@ -20,7 +20,8 @@ The product is a single-surface web app with five core pages: **Sign In / Sign U
 | `colors_and_type.css` | Source-of-truth CSS custom properties (color + radius + type). Drop-in. |
 | `preview/*.html` | Small atomic cards rendered in the Design System tab (colors, type, components, etc.). |
 | `ui_kits/web/` | High-fidelity recreation of the web app — pages as JSX, `index.html` boots a click-thru prototype. |
-| `_reference/` | Verbatim imports from the source repo: `shadcn-components/*.tsx`, `styles/globals.css`, `lib/utils.ts`. Read-only reference; do NOT re-import these into designs — use `colors_and_type.css` + the UI kit instead. |
+
+When working in production code within the `bookish` repo, read the real primitives directly from `packages/ui/src/components/*.tsx`, `packages/ui/src/styles/globals.css`, and `packages/ui/src/lib/utils.ts`. Do NOT re-import from this skill into the app — use `colors_and_type.css` + the UI kit only for throwaway artifacts.
 
 ---
 
