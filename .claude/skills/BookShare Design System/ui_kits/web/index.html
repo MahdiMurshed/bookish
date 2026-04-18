@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BookShare — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="kit.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Icons.jsx"></script>
+<script type="text/babel" src="Primitives.jsx"></script>
+<script type="text/babel" src="Components.jsx"></script>
+<script type="text/babel" src="Pages.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const CURRENT_USER = 'demo@bookshare.io';
+
+function App() {
+  const [route, setRoute] = useState(() => localStorage.getItem('bs.route') || 'browse');
+  const [user, setUser] = useState(() => localStorage.getItem('bs.user') || CURRENT_USER);
+  const [theme, setTheme] = useState(() => localStorage.getItem('bs.theme') || 'light');
+  const [books, setBooks] = useState(window.SEED_BOOKS);
+  const [requests, setRequests] = useState(window.SEED_REQUESTS);
+  const [selectedBookId, setSelectedBookId] = useState(null);
+
+  // Persist
+  useEffect(() => { localStorage.setItem('bs.route', route); }, [route]);
+  useEffect(() => { if (user) localStorage.setItem('bs.user', user); else localStorage.removeItem('bs.user'); }, [user]);
+  useEffect(() => { localStorage.setItem('bs.theme', theme); document.documentElement.classList.toggle('dark', theme === 'dark'); }, [theme]);
+
+  useEffect(() => { window.__hydrateIcons && window.__hydrateIcons(); });
+
+  const nav = (r) => { setRoute(r); };
+  const openBook = (id) => { setSelectedBookId(id); setRoute('detail'); };
+
+  const incoming = requests.filter((r) => r.owner_email === user);
+  const outgoing = requests.filter((r) => r.requester_email === user);
+  const unreadCount = incoming.filter((r) => r.status === 'pending').length;
+
+  const signOut = () => { setUser(null); setRoute('signin'); };
+  const signIn = (email) => { setUser(email || CURRENT_USER); setRoute('browse'); };
+  const toggleTheme = () => setTheme((t) => t === 'dark' ? 'light' : 'dark');
+
+  const addBook = (f) => {
+    const newBook = { id: 'user-' + Date.now(), ...f, owner_email: user, owner: 'You', is_lendable: true, description: '', condition: 'good', cover_bg: 'linear-gradient(160deg,#2d5048,#0f2320)', cover_fg: '#e3f1e8', isbn: '' };
+    setBooks((bs) => [newBook, ...bs]);
+  };
+  const toggleLendable = (id) => setBooks((bs) => bs.map((b) => b.id === id ? { ...b, is_lendable: !b.is_lendable } : b));
+  const deleteBook = (id) => setBooks((bs) => bs.filter((b) => b.id !== id));
+
+  const makeRequest = (bookId) => {
+    const book = books.find((b) => b.id === bookId);
+    setRequests((rs) => [{ id: 'r-' + Date.now(), book, requester: 'You', requester_email: user, owner_email: book.owner_email, status: 'pending', message: '', due_date: null, requested_at: 'Just now' }, ...rs]);
+  };
+  const reqAction = (id, action) => {
+    const nextStatus = { approve: 'approved', deny: 'denied', hand_over: 'handed_over', return: 'returned', cancel: 'cancelled' }[action];
+    setRequests((rs) => rs.map((r) => r.id === id ? { ...r, status: nextStatus } : r));
+  };
+
+  const myBooks = books.filter((b) => b.owner_email === user);
+  const selected = selectedBookId ? books.find((b) => b.id === selectedBookId) : null;
+  const activeReqForSelected = selected && requests.find((r) => r.book.id === selected.id && r.requester_email === user && !['denied','cancelled','returned'].includes(r.status));
+
+  if (!user) {
+    return (
+      <>
+        <Header route={route} onNavigate={nav} user={null} theme={theme} onToggleTheme={toggleTheme} />
+        <main className="kit-main">
+          {route === 'signup'
+            ? <SignUpPage onNavigate={nav} onSignIn={signIn} />
+            : <SignInPage onNavigate={nav} onSignIn={signIn} />}
+        </main>
+      </>
+    );
+  }
+
+  let page = null;
+  if (route === 'browse') page = <BrowsePage books={books.filter((b) => b.is_lendable && b.owner_email !== user)} onOpen={openBook} />;
+  else if (route === 'library') page = <MyLibraryPage myBooks={myBooks} onOpen={openBook} onAdd={addBook} onToggle={toggleLendable} onDelete={deleteBook} />;
+  else if (route === 'requests') page = <RequestsPage incoming={incoming} outgoing={outgoing} onAction={reqAction} />;
+  else if (route === 'detail' && selected) page = <BookDetailPage book={selected} currentUser={user} onNavigate={nav} onRequest={makeRequest} requestStatus={activeReqForSelected?.status} />;
+  else if (route === 'profile') page = <div className="kit-page"><h1 className="ds-h1">Profile</h1><p className="ds-muted">Profile coming in Phase 4.</p></div>;
+  else page = <BrowsePage books={books.filter((b) => b.is_lendable && b.owner_email !== user)} onOpen={openBook} />;
+
+  return (
+    <>
+      <Header route={route} onNavigate={nav} onSignOut={signOut} user={user} unreadCount={unreadCount} theme={theme} onToggleTheme={toggleTheme} />
+      <main className="kit-main">{page}</main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

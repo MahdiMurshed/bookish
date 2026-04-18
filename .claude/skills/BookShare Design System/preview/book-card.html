@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+.card{width:160px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--card);transition:box-shadow 150ms}
+.card:hover{box-shadow:var(--shadow-sm)}
+.cover{aspect-ratio:2/3;background:linear-gradient(160deg,#7a3b2e,#2c1810);position:relative;display:flex;align-items:center;justify-content:center;color:#f3e8c8;font-family:Georgia,serif;padding:12px;text-align:center}
+.dot{position:absolute;top:8px;right:8px;width:12px;height:12px;border-radius:9999px;background:var(--availability);box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+.title-cov{font-size:14px;font-weight:700;line-height:1.2;letter-spacing:.02em}
+.meta{padding:12px}
+.title{font-size:14px;font-weight:500;line-height:1.3;margin:0}
+.auth{font-size:12px;color:var(--muted-foreground);margin-top:2px}
+.genre{display:inline-block;margin-top:6px;padding:1px 8px;border-radius:9999px;background:var(--secondary);color:var(--secondary-foreground);font-size:11px}
+.row{display:flex;gap:12px}
+</style></head><body>
+<div class="row">
+  <div class="card">
+    <div class="cover"><div class="dot"></div><span class="title-cov">The Left Hand of Darkness</span></div>
+    <div class="meta"><p class="title">The Left Hand of Darkness</p><p class="auth">Ursula K. Le Guin</p><span class="genre">Science Fiction</span></div>
+  </div>
+  <div class="card">
+    <div class="cover" style="background:linear-gradient(160deg,#1a3a5c,#0a1828)"><div class="dot" style="background:var(--muted-foreground);opacity:.3"></div><span class="title-cov">Piranesi</span></div>
+    <div class="meta"><p class="title">Piranesi</p><p class="auth">Susanna Clarke</p><span class="genre">Fantasy</span></div>
+  </div>
+</div>
+</body></html>
