@@ -1,6 +1,7 @@
 import type { Notification, NotificationType } from '@repo/api-client';
 import {
   getNotifications,
+  getThread,
   getUnreadCount,
   getUnreadCountByTypes,
   markAllNotificationsRead,
@@ -9,7 +10,10 @@ import {
 } from '@repo/api-client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import { NewMessageToast } from '@/components/Toast/NewMessageToast';
 import { useAuth } from '@/contexts/AuthContext';
 
 import { messageKeys } from './useMessages';
@@ -88,42 +92,74 @@ export function useMarkAllRead() {
 }
 
 /**
- * Subscribe to realtime notifications. Invalidates queries on new notification.
+ * Single realtime subscription to the current user's notifications. One
+ * handler does both jobs:
+ *   1. Invalidate thread + message + notification caches so the UI stays live.
+ *   2. Fire a cross-page NewMessageToast for `new_chat_message` events that
+ *      didn't originate on the thread the user is already viewing.
  *
- * Race fix for `new_chat_message`: if the user is actively viewing the
- * messages route for the same thread that produced the notification, skip the
- * notification invalidation. The thread component's markMessagesAsRead is
- * responsible for clearing both the message AND notification in a single
- * server call — letting this subscription invalidate would trigger a refetch
- * in the narrow window between the server write and the realtime arrival,
- * briefly flashing the badge up and back. Thread + message caches still
- * invalidate normally so the bubble appears live.
+ * This used to be split across two hooks that each called
+ * subscribeToNotifications, which failed at runtime — Supabase channels with
+ * the same name can only register postgres_changes callbacks once (before
+ * subscribe()). Merging into one hook gives us one channel, one connection,
+ * one source of truth for "something arrived for me".
+ *
+ * Race fix for new_chat_message: when the user is actively viewing the
+ * matching thread, skip BOTH the notification-cache invalidation (badge
+ * won't flash up-and-back in the narrow window between the server write
+ * and the realtime arrival) and the toast (they're already reading it).
  */
 export function useNotificationSubscription() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = subscribeToNotifications(user.id, (notification: Notification) => {
+    const unsubscribe = subscribeToNotifications(user.id, async (notification: Notification) => {
       queryClient.invalidateQueries({ queryKey: threadKeys.all });
 
       if (notification.type === 'new_chat_message' && notification.reference_id) {
         const requestId = notification.reference_id;
         queryClient.invalidateQueries({ queryKey: messageKeys.thread(requestId) });
 
-        if (typeof window !== 'undefined') {
-          // Exact-match, not startsWith: threads have no sub-routes, and
-          // prefix-matching on UUIDs is safe but loose.
-          const currentlyViewingThisThread = window.location.pathname === `/messages/${requestId}`;
-          if (currentlyViewingThisThread) return;
+        const currentlyViewingThisThread =
+          typeof window !== 'undefined' && window.location.pathname === `/messages/${requestId}`;
+        if (currentlyViewingThisThread) return;
+
+        queryClient.invalidateQueries({ queryKey: notificationKeys.all });
+
+        try {
+          const thread = await queryClient.fetchQuery({
+            queryKey: threadKeys.detail(requestId),
+            queryFn: () => getThread(requestId, user.id),
+            staleTime: 0,
+          });
+          if (thread) {
+            toast.custom(
+              (toastId: string | number) => (
+                <NewMessageToast
+                  toastId={toastId}
+                  thread={thread}
+                  onClick={() => {
+                    toast.dismiss(toastId);
+                    navigate(`/messages/${requestId}`);
+                  }}
+                />
+              ),
+              { duration: 6000 },
+            );
+          }
+        } catch (err) {
+          console.error('[messages] failed to build toast for new message:', err);
         }
+        return;
       }
 
       queryClient.invalidateQueries({ queryKey: notificationKeys.all });
     });
 
     return unsubscribe;
-  }, [user, queryClient]);
+  }, [user, navigate, queryClient]);
 }

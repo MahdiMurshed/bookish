@@ -3,7 +3,6 @@ import { ArrowRightLeft, BookOpen, Library, Mail, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import { useGlobalMessageToasts } from '@/hooks/useGlobalMessageToasts';
 import {
   useNotificationSubscription,
   useUnreadMessageCount,
@@ -14,7 +13,6 @@ export function Header() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   useNotificationSubscription();
-  useGlobalMessageToasts();
   const { data: unreadRequests } = useUnreadRequestCount();
   const { data: unreadMessages } = useUnreadMessageCount();
 
