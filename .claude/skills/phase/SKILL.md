@@ -94,41 +94,30 @@ When completing the current phase:
    - B) Abort — I'll clean up manually
    Do not mark a phase complete with uncommitted work.
 
-2. **Sync the design system reference:**
-   Invoke the `sync-design-system` skill. This catches any drift in
-   `packages/ui/` (new shadcn components, edited globals.css, etc.) that
-   accumulated during the phase and mirrors it into the BookShare Design
-   System skill's `_reference/` snapshot.
-
-   If the sync writes anything new, those files will be picked up
-   alongside `PROGRESS.md` in the commit step below.
-
-3. **Verify build passes:**
+2. **Verify build passes:**
    ```bash
    pnpm build --filter web
    pnpm lint
    ```
    If either fails, show the error and stop.
 
-4. **Update PROGRESS.md:**
+3. **Update PROGRESS.md:**
    - Check off the completed phase: `[x]`
    - Update status line with deliverables summary
    - Note the branch and commit range
 
-5. **Commit the update:**
-   Stage `PROGRESS.md` plus anything `sync-design-system` wrote into
-   `.claude/skills/BookShare Design System/_reference/`.
+4. **Commit the update:**
    ```bash
-   git add PROGRESS.md ".claude/skills/BookShare Design System/_reference/"
+   git add PROGRESS.md
    git commit -m "chore: complete phase {N} - {title}"
    ```
 
-6. **Push the branch:**
+5. **Push the branch:**
    ```bash
    git push origin phase-{N}/{name}
    ```
 
-7. **Show next steps:**
+6. **Show next steps:**
    ```
    PHASE {N} COMPLETE: {Title}
    Branch: phase-{N}/{name}
