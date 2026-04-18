@@ -1,47 +1,44 @@
-## Last Session — 2026-04-11
-Branch: phase-4/social
-Phase: Phase 4 (chat only) — PR #7 open, all review fixes applied, ready to merge
+## Last Session — 2026-04-18
+Branch: phase-5/messages
+Phase: 5 (complete). Next unchecked: Phase 5.5 (Reviews + Profile + Home).
+PR: https://github.com/MahdiMurshed/bookish/pull/9 (ready to merge; two Claude review rounds addressed)
 
 ### What was done
-- Picked up from Phase 3 merge (PR #6 landed 2026-04-05) and scoped Phase 4 to **chat only** (reviews/profile/home deferred)
-- Built per-request chat with Supabase Realtime (commits `d077af3`, `5920ac8`):
-  - api-client `messages.ts` — getMessagesByRequest, sendMessage, subscribeToMessages, markMessagesAsRead
-  - api-client `notifications.ts` — added `createNotification()` helper
-  - shared `message.ts` — Zod sendMessageSchema (1-2000 chars)
-  - hooks `useMessages.ts` — query + optimistic mutation (rollback on error) + Realtime subscription + mark-read
-  - components `MessageBubble.tsx` + `ChatThread.tsx` — shadcn-styled, react-hook-form + Zod composer, Enter-to-send, auto-scroll, mark-read on mount via ref pattern
-  - `BookDetail.tsx` shows ChatThread under active-request notice
-  - `BorrowRequestCard.tsx` collapsible Chat toggle for active statuses
-- **Caught by advisor pre-implementation review:** notifications had no INSERT RLS policy → added migration `002_notification_insert_policy.sql` (commit `07b25e1`)
-- **User caught at runtime:** "messages are not auto-loaded" → discovered the `supabase_realtime` publication was completely empty. Phase 3 `subscribeToNotifications` had been silently no-op'ing for weeks; the 30s polling fallback in `useUnreadCount` masked it. Added migration `003_realtime_publication.sql` adding `messages` + `notifications` to the publication (commit `206e3fc`). Retroactively fixes Phase 3.
-- Created **PR #7** with full template (scope, deferred items, test plan, seed users, checklist)
-- Triggered Claude bot review → 3 issues + 4 minor + 7 positives. Triaged: 5 FIX, 2 DEFER (Phase 5), 0 SKIP. Round-1 saved as `.claude/pr-reviews/pr-7-{review,tasks}-round-1.md`
-- Applied all 5 fixes in commit `80aecf3`:
-  1. Realtime INSERT handler now wraps the joined-sender refetch in try/catch and falls back to `payload.new` with a placeholder sender (no more silent message drops on transient errors)
-  2. `useMarkMessagesRead` flips `read: true` in-place via `setQueryData` (no more "Loading messages..." flicker)
-  3. `optimisticId` uses `null` sentinel + early return + locally-bound const (closes silent correctness hole)
-  4. `ACTIVE_BORROW_STATUSES` added to `@repo/shared/constants` as single source of truth (used by `getActiveRequestForBook`, `createBorrowRequest` dedupe, and `BorrowRequestCard`)
-  5. `subscribeToMessages` and `subscribeToNotifications` both log `CHANNEL_ERROR`/`TIMED_OUT`/`CLOSED` via the `.subscribe()` status callback
-- Triggered re-review → bot verified all 5 fixes are correct, no new issues, **PR ready to merge**. Round-2 saved as `pr-7-review-round-2.md`
-- Verified locally: chat works end-to-end with two users, Realtime delivers within ~1s, optimistic updates work, mark-read no longer flickers
+
+**Phase 5: Messages & Notifications UX — shipped end-to-end in 8 phases + 3 review passes.**
+
+- Built a dedicated `/messages` surface from the handoff at `~/Downloads/design_handoff_messages 2/`. Replaces the per-book-detail chat embedded in `BookDetail.tsx` that shipped in phase-4/social.
+- `/plan-eng-review` pre-implementation: raised 4 architectural issues, all resolved in the plan before code was written (`~/.claude/plans/spicy-prancing-wadler.md`).
+- Phase A: client-side thread projection (`getThreads` / `getThread` via PostgREST embed + RLS scoping, no DB migration), 5 new shadcn primitives (avatar/card/scroll-area/separator/sonner), typed unread-count hooks, dual-write `markMessagesAsRead` + race fix in the notifications subscription, 9 api-client tests.
+- Phase B: `/messages` + `/messages/:threadId` routes, Mail nav item with typed badge, `<Toaster />` mounted at App root.
+- Phase C–D: inbox list with avatar palette + unread tint + search, thread panel with `buildThreadTimeline` merging synthetic opening bubble + real messages + derived system events, date headers, sender-run-aware timestamps, Composer with RHF + Zod and Enter-to-send.
+- Phase E: role-aware QuickActions bar wired to existing borrow-request mutations.
+- Phase F: cross-page sonner toast, suppressed on active-thread view.
+- Phase G: mobile single-column layout with back-arrow in ThreadHeader.
+- Phase H: migrated BookDetail + BorrowRequestCard entry points to `/messages/<id>`; deleted legacy `ChatThread.tsx` + old `MessageBubble.tsx` (-195 lines).
+- Browser dogfooded as Alice via the gstack `browse` tool — surfaced two latent prod bugs: double-subscription crash on `/messages` (fixed by consolidating into one `useNotificationSubscription`), and missing `messages_update` RLS policy that had silently broken `markMessagesAsRead` since phase-4/social (fixed via migration 004).
+- `/review` during implementation: surfaced over-permissive UPDATE grant. Migration 005 narrows it to `UPDATE(read)` column-level.
+- GitHub Claude review round 1: 5 findings → dead `isSameDay` branch removed, QuickActions `onError` toasts added, migration 006 mirroring 005 for notifications, `staleTime 0 → 5_000`. 1 deferred to TODOS.
+- GitHub Claude review round 2: 1 nit (hardcoded query keys in `useMarkMessagesRead`) → fixed with `notificationKeys.all` / `threadKeys.all`.
+- Supabase remote: linked + repaired tracking table (001–003 were applied via SQL Editor historically but never tracked). Migrations 004/005/006 applied via `supabase db push`. `supabase migration list` shows 001–006 Local | Remote.
+- PROGRESS.md: Phase 5 checked. Original "Phase 5: Polish + Deploy" bumped to Phase 6. Phase 4.5 renamed to Phase 5.5 and reordered below Phase 5.
+- Design system skill `_reference/` mirrored the 5 new primitives.
+- TODOS.md captures 9 deferred items (hook tests, pagination, virtualization, typing indicators, attachments, archived filter, toast stacking, 99+ cap, useLocation ref).
+
+**Final: 48 tests (39 web + 9 api-client), typecheck clean, build clean, remote schema at parity with branch.**
 
 ### What's next
-- **Merge PR #7** via `gh pr merge 7 --squash --delete-branch` (or however you prefer to merge)
-- After merge, run `/phase complete` to mark Phase 4 done in PROGRESS.md and update local state
-- Start the new follow-up phase for the deferred Phase 4 work: **reviews + profile + home landing page**
-  - Reviews: api-client `reviews.ts` (create, getForBook), `useReviews` hook, ReviewCard, review form on BookDetail (only when borrow_request.status = 'returned')
-  - Profile: `Profile.tsx` page with edit form (display_name, bio, avatar_url) + stats (books owned, books borrowed, average rating)
-  - Home: hero + community stats (total books, active borrows, total users)
-- Then Phase 5 (polish + deploy): fix live Vercel deploy SPA rewrites, api-client unit tests, responsive pass, loading skeletons
+
+1. **Merge PR #9.** Both Claude review rounds verified "ready to merge". CI had one transient 504 on Supabase CLI install that retried green. Suggested: `gh pr merge 9 --squash --delete-branch`.
+2. **Run `/phase` to start Phase 5.5** — Reviews + Profile + Home. The plan file (`~/.claude/plans/frolicking-snuggling-swing.md`) has the scope.
+3. Alternative: `/document-release` before Phase 5.5 to sync CLAUDE.md + README with the new `/messages` surface and the sonner dep.
 
 ### Open issues
-- Live Vercel deploy still broken (missing SPA rewrites — Phase 5)
-- AddBookForm.tsx still exceeds 150 lines + uses useState instead of react-hook-form + Zod (deferred from Phase 2)
-- No tests for borrowRequests/notifications/messages api-client modules (Phase 5)
-- Notification INSERT RLS policy is broad (any auth user can notify any other user) — Phase 5 hardening, needs SECURITY DEFINER RPC because tightening to `auth.uid() = user_id` breaks legitimate cross-user notifications
-- Auto-scroll fires on every new message regardless of scroll position — Phase 5 polish, needs scroll-position tracking
-- Cosmetic: optimistic message bubble briefly shows "Unknown" if `display_name` is empty in user_metadata; self-corrects on next refetch
-- Nice-to-have edge case the bot noted: if Realtime fallback fires before `onSuccess` on the sender's side, the placeholder-sender version wins the dedupe race (invisible because `isCurrentUser=true` suppresses the sender name in the bubble — no action needed for V1)
+
+- **PROD notifications bug (pre-existing, now fixed).** Migrations 002 and 004 weren't applied to the remote Supabase before this PR — `notif_insert` was missing, so client-side chat-message notifications have been silently failing since phase-4/social. `messages_update` was missing so `markMessagesAsRead` was a no-op in prod. Both fixed during this session. No known user reports, but if anyone complained that "Messages badge never went up" or "thread shows unread forever" — that was the cause.
+- **CI flake** on `supabase/setup-cli@v1` (504 from GitHub release CDN, retried clean). If it flakes again consider pinning a direct binary download instead.
+- **Kit icon registry drift** in the BookShare Design System skill: ArrowLeft / Inbox / Mail / MessageSquare / X are used in the repo but not registered in `ui_kits/web/Icons.jsx`. Not blocking production code — only affects the click-thru prototype in the design system skill.
 
 ### Prompt for next session
-> I'm working on BookShare V2. PR #7 (Phase 4 chat) is open on branch `phase-4/social` with all review fixes applied and verified by the bot — ready to merge. Run `/pickup` first for full context. First action: merge PR #7 (`gh pr merge 7 --squash --delete-branch`), then run `/phase complete` to update PROGRESS.md, then start the next phase covering the deferred Phase 4 work: reviews (api-client `reviews.ts` with create/getForBook, only allowed when borrow.status = 'returned' per existing RLS), profile page (edit display_name/bio/avatar + stats), and Home landing page (hero + community stats: total books, active borrows, total users). Use shadcn/ui + react-hook-form + Zod schemas in `@repo/shared`. Reference `../bookshare` for patterns. Note: the live Vercel deploy is still broken (SPA rewrites missing) — that's Phase 5.
+
+> I'm on branch `phase-5/messages` with PR #9 ready to merge. Start by running `/pickup` for full context. Then merge PR #9 with `gh pr merge 9 --squash --delete-branch`, pull master, and run `/phase` to start Phase 5.5 (Reviews + Profile + Home). Plan is at `~/.claude/plans/frolicking-snuggling-swing.md`. If you'd rather update docs first, run `/document-release` before `/phase` to sync CLAUDE.md and README with the new `/messages` surface + sonner dep that shipped in Phase 5.
