@@ -146,3 +146,23 @@ export interface BorrowRequestWithDetails extends BorrowRequest {
   book: Book;
   requester: User;
 }
+
+// Thread = client-side projection over borrow_requests + books + users + messages.
+// Not a stored entity. Produced by getThreads/getThread.
+export type ThreadBook = Pick<Book, 'id' | 'owner_id' | 'title' | 'author' | 'cover_url'>;
+
+export interface ThreadLastMessage {
+  id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
+}
+
+export interface Thread {
+  borrow_request: BorrowRequest;
+  book: ThreadBook;
+  counterparty: MessageSender;
+  last_message: ThreadLastMessage | null;
+  unread_count: number;
+  last_activity_at: string;
+}

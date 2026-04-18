@@ -51,7 +51,7 @@ export async function getNotifications(): Promise<Notification[]> {
 }
 
 /**
- * Get unread notification count.
+ * Get unread notification count across all types.
  */
 export async function getUnreadCount(): Promise<number> {
   const { data: userData } = await supabase.auth.getUser();
@@ -62,6 +62,28 @@ export async function getUnreadCount(): Promise<number> {
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userData.user.id)
     .eq('read', false);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
+/**
+ * Get unread notification count filtered to a subset of types. Used by the
+ * Messages and Requests header badges so each surface counts only its own
+ * notifications — no more combined count leaking across features.
+ */
+export async function getUnreadCountByTypes(types: NotificationType[]): Promise<number> {
+  if (types.length === 0) return 0;
+
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) throw new Error('Not authenticated');
+
+  const { count, error } = await supabase
+    .from('notifications')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userData.user.id)
+    .eq('read', false)
+    .in('type', types);
 
   if (error) throw error;
   return count ?? 0;
