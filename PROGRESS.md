@@ -8,9 +8,9 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - [x] **Phase 1: Scaffold + Auth** — Turborepo init, packages config, Supabase migration (6 tables + RLS + triggers), auth (signUp/signIn/signOut/resetPassword), AuthContext, ProtectedRoute/PublicRoute, SignIn/SignUp/ResetPassword pages, Header + dark mode
 - [x] **Phase 2: Books + Bookshelf** — api-client books CRUD + Google Books search, shared schemas, useBooks hooks, MyLibrary page, Browse page, BookCard/BookGrid/AddBookForm
 - [x] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
-- [x] **Phase 4: Chat** — per-request chat (messages), Realtime delivery, optimistic updates, mark-read, notifications. Reviews/profile/home moved to Phase 4.5.
-- [ ] **Phase 4.5: Reviews + Profile + Home** — reviews (create after return + getForBook), Profile page (edit + stats), Home landing page (hero + community stats)
+- [x] **Phase 4: Chat** — per-request chat (messages), Realtime delivery, optimistic updates, mark-read, notifications. Reviews/profile/home deferred.
 - [x] **Phase 5: Messages & Notifications UX** — dedicated `/messages` route (inbox + thread + composer) replacing the per-book embedded chat, header Mail nav + typed unread-message badge, cross-page sonner toast, role-aware quick-action bar, mobile single-column layout, plus two RLS fixes (messages_update policy + column-scoped UPDATE grants on messages and notifications).
+- [ ] **Phase 5.5: Reviews + Profile + Home** — reviews (create after return + getForBook), Profile page (edit + stats), Home landing page (hero + community stats)
 - [ ] **Phase 6: Polish + Deploy** — loading/error/empty states polish, auth error handler, book delete guard, Vercel SPA rewrites, api-client unit tests, CLAUDE.md. (Was "Phase 5: Polish + Deploy" in the original plan; responsive design landed with Phase 5's mobile pass.)
 
 ## Key Decisions
