@@ -1,0 +1,13 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans);display:flex;flex-direction:column;gap:10px}
+.banner{padding:12px 14px;border-radius:var(--radius-md);font-size:14px;display:flex;align-items:center;gap:8px}
+.success{background:color-mix(in oklch, var(--success) 15%, var(--background));color:var(--foreground)}
+.error{background:color-mix(in oklch, var(--destructive) 10%, var(--background));color:var(--destructive)}
+.info{background:color-mix(in oklch, var(--primary) 5%, var(--background));color:var(--foreground);border:1px solid color-mix(in oklch, var(--primary) 20%, var(--background))}
+svg{width:16px;height:16px;flex-shrink:0}
+</style></head><body>
+<div class="banner success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Request sent! The owner will be notified.</div>
+<div class="banner error">Passwords do not match</div>
+<div class="banner info">You have a <strong>pending</strong> request for this book.</div>
+</body></html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.b{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:9999px;font-size:12px;font-weight:500;border:1px solid transparent;line-height:1.4}
+.default{background:var(--primary);color:var(--primary-foreground)}
+.secondary{background:var(--secondary);color:var(--secondary-foreground)}
+.outline{background:transparent;color:var(--foreground);border-color:var(--border)}
+.destructive{background:var(--destructive);color:#fff}
+.success{background:var(--success);color:var(--success-foreground)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:9999px}
+</style></head><body>
+<div class="row">
+  <span class="b default">3</span>
+  <span class="b outline">Pending</span>
+  <span class="b default">Approved</span>
+  <span class="b secondary">Handed Over</span>
+  <span class="b secondary">Returned</span>
+  <span class="b destructive">Denied</span>
+  <span class="b outline">Cancelled</span>
+  <span class="b success"><span class="dot" style="background:#fff"></span>Available to borrow</span>
+  <span class="b secondary">Fiction</span>
+  <span class="b secondary">Mystery</span>
+</div>
+</body></html>

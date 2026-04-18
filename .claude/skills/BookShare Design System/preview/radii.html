@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--background);color:var(--foreground)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-family:var(--font-mono);font-size:11px}
+.box{border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px;background:var(--card);display:flex;flex-direction:column;gap:6px}
+.demo{background:var(--muted);height:34px}
+.name{font-weight:600;font-family:var(--font-sans);font-size:12px}
+.val{color:var(--muted-foreground)}
+</style></head><body>
+<div class="grid">
+  <div class="box"><div class="demo" style="border-radius:var(--radius-sm)"></div><span class="name">radius-sm</span><span class="val">6px</span></div>
+  <div class="box"><div class="demo" style="border-radius:var(--radius-md)"></div><span class="name">radius-md</span><span class="val">8px · buttons, inputs</span></div>
+  <div class="box"><div class="demo" style="border-radius:var(--radius-lg)"></div><span class="name">radius-lg</span><span class="val">10px · cards</span></div>
+  <div class="box"><div class="demo" style="border-radius:9999px"></div><span class="name">full</span><span class="val">badges</span></div>
+</div>
+</body></html>

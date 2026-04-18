@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:16px;}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sw{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;font-size:11px;font-family:var(--font-mono)}
+.chip{height:68px}
+.meta{padding:6px 8px;display:flex;flex-direction:column;gap:2px;background:var(--card)}
+.name{font-weight:600;color:var(--foreground);font-family:var(--font-sans);font-size:12px}
+.val{color:var(--muted-foreground);font-size:10px}
+</style></head><body>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:var(--destructive)"></div><div class="meta"><span class="name">destructive</span><span class="val">oklch(.577 .245 27.3)</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--success)"></div><div class="meta"><span class="name">success</span><span class="val">oklch(.65 .19 145)</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--warning)"></div><div class="meta"><span class="name">warning</span><span class="val">oklch(.75 .15 85)</span></div></div>
+  <div class="sw"><div class="chip" style="background:var(--availability)"></div><div class="meta"><span class="name">availability dot</span><span class="val">green-500</span></div></div>
+</div>
+</body></html>

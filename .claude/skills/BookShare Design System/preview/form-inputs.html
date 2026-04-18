@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+.wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:640px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:14px;font-weight:500}
+input,textarea,select{height:36px;padding:0 12px;border-radius:var(--radius-md);border:1px solid var(--input);background:transparent;font-size:14px;font-family:inherit;box-shadow:var(--shadow-xs);color:var(--foreground);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent)}
+textarea{height:68px;padding:8px 12px;resize:vertical}
+.search{position:relative}
+.search input{padding-left:34px}
+.search svg{position:absolute;left:10px;top:10px;width:16px;height:16px;color:var(--muted-foreground)}
+</style></head><body>
+<div class="wrap">
+  <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+  <div class="field"><label>Password</label><input type="password" placeholder="Your password"></div>
+  <div class="field" style="grid-column:1/-1"><label>Search</label>
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input placeholder="Search by title or author..."></div>
+  </div>
+</div>
+</body></html>
