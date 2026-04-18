@@ -114,9 +114,9 @@ export function useNotificationSubscription() {
         queryClient.invalidateQueries({ queryKey: messageKeys.thread(requestId) });
 
         if (typeof window !== 'undefined') {
-          const currentlyViewingThisThread = window.location.pathname.startsWith(
-            `/messages/${requestId}`,
-          );
+          // Exact-match, not startsWith: threads have no sub-routes, and
+          // prefix-matching on UUIDs is safe but loose.
+          const currentlyViewingThisThread = window.location.pathname === `/messages/${requestId}`;
           if (currentlyViewingThisThread) return;
         }
       }
