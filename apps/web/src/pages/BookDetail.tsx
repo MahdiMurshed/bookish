@@ -1,9 +1,9 @@
 import { Badge } from '@repo/ui/components/badge';
-import { BookOpen } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
+import { BookOpen, MessageSquare } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 import { BorrowRequestForm } from '@/components/Borrow/BorrowRequestForm';
-import { ChatThread } from '@/components/Messages/ChatThread';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBookDetail } from '@/hooks/useBooks';
 import { useActiveRequestForBook } from '@/hooks/useBorrowRequests';
@@ -72,7 +72,7 @@ export default function BookDetail() {
             </p>
           </div>
 
-          {/* Active request notice + chat thread */}
+          {/* Active request notice + link to the full conversation */}
           {activeRequest && (
             <div className="space-y-3">
               <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
@@ -82,7 +82,12 @@ export default function BookDetail() {
                   request for this book.
                 </p>
               </div>
-              <ChatThread requestId={activeRequest.id} />
+              <Button asChild variant="outline" className="w-full sm:w-auto">
+                <Link to={`/messages/${activeRequest.id}`}>
+                  <MessageSquare className="h-4 w-4" aria-hidden="true" />
+                  Open conversation in Messages
+                </Link>
+              </Button>
             </div>
           )}
 
