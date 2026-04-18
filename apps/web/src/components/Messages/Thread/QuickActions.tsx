@@ -2,6 +2,7 @@ import type { BorrowRequestStatus, Thread } from '@repo/api-client';
 import { Button } from '@repo/ui/components/button';
 import { useQueryClient } from '@tanstack/react-query';
 import { Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   useApproveBorrowRequest,
@@ -62,6 +63,11 @@ export function QuickActions({ thread, currentUserId }: QuickActionsProps) {
     queryClient.invalidateQueries({ queryKey: threadKeys.all });
   };
 
+  const onActionError = (verb: string) => (err: unknown) => {
+    const detail = err instanceof Error ? err.message : 'Please try again.';
+    toast.error(`Couldn't ${verb}. ${detail}`);
+  };
+
   const pending =
     approve.isPending || deny.isPending || handOver.isPending || markReturned.isPending;
 
@@ -76,7 +82,10 @@ export function QuickActions({ thread, currentUserId }: QuickActionsProps) {
             size="sm"
             disabled={pending}
             onClick={() =>
-              approve.mutate({ id: requestId, input: undefined }, { onSuccess: invalidateTimeline })
+              approve.mutate(
+                { id: requestId, input: undefined },
+                { onSuccess: invalidateTimeline, onError: onActionError('approve this request') },
+              )
             }
           >
             <Check className="h-4 w-4" aria-hidden="true" />
@@ -87,7 +96,12 @@ export function QuickActions({ thread, currentUserId }: QuickActionsProps) {
             size="sm"
             variant="outline"
             disabled={pending}
-            onClick={() => deny.mutate({ id: requestId }, { onSuccess: invalidateTimeline })}
+            onClick={() =>
+              deny.mutate(
+                { id: requestId },
+                { onSuccess: invalidateTimeline, onError: onActionError('deny this request') },
+              )
+            }
           >
             Deny
           </Button>
@@ -100,7 +114,10 @@ export function QuickActions({ thread, currentUserId }: QuickActionsProps) {
           size="sm"
           disabled={pending}
           onClick={() =>
-            handOver.mutate({ id: requestId, input: undefined }, { onSuccess: invalidateTimeline })
+            handOver.mutate(
+              { id: requestId, input: undefined },
+              { onSuccess: invalidateTimeline, onError: onActionError('mark as handed over') },
+            )
           }
         >
           Mark Handed Over
@@ -115,7 +132,7 @@ export function QuickActions({ thread, currentUserId }: QuickActionsProps) {
           onClick={() =>
             markReturned.mutate(
               { id: requestId, notes: undefined },
-              { onSuccess: invalidateTimeline },
+              { onSuccess: invalidateTimeline, onError: onActionError('mark as returned') },
             )
           }
         >

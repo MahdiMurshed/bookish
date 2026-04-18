@@ -50,6 +50,12 @@ three months can continue without re-deriving the rationale.
 - **Context:** `sonner` supports multi-toast natively via its `position` + stacking config. Tune `visibleToasts` + `expand`.
 - **Depends on:** nothing. Low priority.
 
+### Pathname check in realtime subscription: use React Router ref
+- **What:** In `useNotificationSubscription` (`apps/web/src/hooks/useNotifications.tsx:128`), switch the `window.location.pathname === '/messages/${requestId}'` check to a `useRef` that tracks the latest value returned by `useLocation().pathname`.
+- **Why:** Reading directly from `window.location` works in an SPA but bypasses the router's state. In practice the two are in sync, but any future SSR / test harness / nested-router scenario would see stale values. This is idiomatic correctness, not a bug.
+- **Context:** `useLocation()` + a `useRef` that's updated in a `useEffect` without deps (fires every render, keeps the ref current without re-subscribing). Reviewer snippet in PR #9 review, finding #5.
+- **Depends on:** nothing.
+
 ### Badge 99+ cap
 - **What:** When unread message or request count exceeds 99, render "99+".
 - **Why:** Raw three-digit counts break the 16px pill layout.

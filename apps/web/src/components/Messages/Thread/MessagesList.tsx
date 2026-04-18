@@ -1,5 +1,5 @@
 import type { AuthUser, MessageWithSender, Thread } from '@repo/api-client';
-import { format, isSameDay, isToday, isYesterday } from 'date-fns';
+import { format, isToday, isYesterday } from 'date-fns';
 import { useEffect, useRef } from 'react';
 
 import { buildThreadTimeline, type TimelineItem } from '@/lib/threadTimeline';
@@ -79,7 +79,6 @@ function DateHeader({ date }: { date: string }) {
   let label: string;
   if (isToday(d)) label = 'Today';
   else if (isYesterday(d)) label = 'Yesterday';
-  else if (isSameDay(d, new Date())) label = 'Today';
   else label = format(d, 'EEEE, MMM d');
 
   return (
