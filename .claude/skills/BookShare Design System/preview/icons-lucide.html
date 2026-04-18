@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans);color:var(--foreground)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;text-align:center;font-size:11px;color:var(--muted-foreground);font-family:var(--font-mono)}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px}
+[data-lucide]{width:20px;height:20px;stroke-width:2}
+</style></head><body>
+<div class="grid">
+  <div class="cell"><i data-lucide="book-open"></i>book-open</div>
+  <div class="cell"><i data-lucide="library"></i>library</div>
+  <div class="cell"><i data-lucide="arrow-right-left"></i>arrow-right-left</div>
+  <div class="cell"><i data-lucide="user"></i>user</div>
+  <div class="cell"><i data-lucide="plus"></i>plus</div>
+  <div class="cell"><i data-lucide="search"></i>search</div>
+  <div class="cell"><i data-lucide="send"></i>send</div>
+  <div class="cell"><i data-lucide="check"></i>check</div>
+  <div class="cell"><i data-lucide="sun"></i>sun</div>
+  <div class="cell"><i data-lucide="moon"></i>moon</div>
+  <div class="cell"><i data-lucide="star"></i>star</div>
+  <div class="cell"><i data-lucide="message-circle"></i>message</div>
+</div>
+<script>lucide.createIcons();</script>
+</body></html>

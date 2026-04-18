@@ -1,0 +1,151 @@
+/* UI Kit — BookShare
+ * Classes prefixed .kit-*; uses colors_and_type.css tokens only.
+ */
+
+/* Header ------------------------------------------------------------ */
+.kit-header { border-bottom: 1px solid var(--border); background: var(--background); }
+.kit-header-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+.kit-logo { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; color: var(--foreground); cursor: pointer; }
+.kit-nav { display: flex; align-items: center; gap: 16px; }
+.kit-navlink { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; color: var(--muted-foreground); cursor: pointer; text-decoration: none; }
+.kit-navlink:hover, .kit-navlink--active { color: var(--foreground); }
+.kit-nav-badge { margin-left: 2px; padding: 0 5px; height: 16px; min-width: 16px; font-size: 10px; }
+.kit-icon-btn { background: transparent; border: 0; padding: 8px; border-radius: var(--radius-md); color: var(--muted-foreground); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.kit-icon-btn:hover { color: var(--foreground); }
+.kit-link-btn { background: transparent; border: 0; font-size: 14px; color: var(--muted-foreground); cursor: pointer; font-family: inherit; }
+.kit-link-btn:hover { color: var(--foreground); }
+.kit-link-primary { color: var(--primary); text-decoration: none; cursor: pointer; font-size: 14px; }
+.kit-link-primary:hover { text-decoration: underline; }
+.dark .kit-link-primary { color: var(--foreground); }
+
+/* Main layout ------------------------------------------------------- */
+.kit-main { max-width: 1280px; margin: 0 auto; padding: 32px 16px; min-height: calc(100vh - 56px); }
+.kit-page { display: flex; flex-direction: column; gap: 24px; max-width: 1200px; }
+.kit-page-head { display: flex; align-items: center; justify-content: space-between; }
+
+/* Button ------------------------------------------------------------ */
+.kit-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 16px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; border: 0; cursor: pointer; font-family: inherit; transition: background 120ms, opacity 120ms; white-space: nowrap; }
+.kit-btn:disabled { opacity: .5; pointer-events: none; }
+.kit-btn--default { background: var(--primary); color: var(--primary-foreground); }
+.kit-btn--default:hover { background: color-mix(in oklch, var(--primary) 90%, transparent); }
+.kit-btn--secondary { background: var(--secondary); color: var(--secondary-foreground); }
+.kit-btn--secondary:hover { background: color-mix(in oklch, var(--secondary) 80%, transparent); }
+.kit-btn--outline { background: var(--background); color: var(--foreground); border: 1px solid var(--border); box-shadow: var(--shadow-xs); }
+.kit-btn--outline:hover { background: var(--accent); }
+.kit-btn--ghost { background: transparent; color: var(--foreground); }
+.kit-btn--ghost:hover { background: var(--accent); }
+.kit-btn--destructive { background: var(--destructive); color: #fff; }
+.kit-btn--size-sm { height: 32px; padding: 0 12px; font-size: 13px; gap: 6px; }
+.kit-btn--size-lg { height: 40px; padding: 0 24px; }
+
+/* Badge ------------------------------------------------------------- */
+.kit-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 1.4; }
+.kit-badge--default { background: var(--primary); color: var(--primary-foreground); }
+.kit-badge--secondary { background: var(--secondary); color: var(--secondary-foreground); }
+.kit-badge--outline { background: transparent; color: var(--foreground); border-color: var(--border); }
+.kit-badge--destructive { background: var(--destructive); color: #fff; }
+.kit-badge--success { background: var(--success); color: var(--success-foreground); }
+
+/* Form fields ------------------------------------------------------- */
+.kit-form { display: flex; flex-direction: column; gap: 16px; }
+.kit-field { display: flex; flex-direction: column; gap: 8px; }
+.kit-label { font-size: 14px; font-weight: 500; color: var(--foreground); }
+.kit-input, .kit-textarea, .kit-select { width: 100%; padding: 0 12px; border: 1px solid var(--input); background: transparent; font-size: 14px; font-family: inherit; border-radius: var(--radius-md); box-shadow: var(--shadow-xs); color: var(--foreground); outline: none; transition: border 120ms, box-shadow 120ms; }
+.kit-input { height: 36px; }
+.kit-select { height: 36px; }
+.kit-textarea { min-height: 76px; padding: 8px 12px; resize: vertical; font-family: inherit; }
+.kit-input:focus, .kit-textarea:focus, .kit-select:focus { border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent); }
+.dark .kit-input, .dark .kit-textarea, .dark .kit-select { background: color-mix(in oklch, var(--input) 30%, transparent); }
+
+/* Tabs -------------------------------------------------------------- */
+.kit-tabs { display: flex; flex-direction: column; gap: 12px; }
+.kit-tabs-list { display: inline-flex; align-items: center; gap: 2px; padding: 3px; background: var(--muted); border-radius: var(--radius-lg); width: fit-content; height: 36px; color: var(--muted-foreground); }
+.kit-tab { display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; color: var(--foreground); opacity: .6; cursor: pointer; height: 100%; border: 0; background: transparent; font-family: inherit; transition: all 120ms; }
+.kit-tab:hover { opacity: 1; }
+.kit-tab--active { background: var(--background); opacity: 1; box-shadow: var(--shadow-sm); }
+
+/* Book card --------------------------------------------------------- */
+.kit-bookcard { display: block; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--card); cursor: pointer; transition: box-shadow 150ms; text-decoration: none; color: inherit; }
+.kit-bookcard:hover { box-shadow: var(--shadow-sm); }
+.kit-cover { aspect-ratio: 2/3; background: var(--muted); position: relative; display: flex; align-items: center; justify-content: center; padding: 14px; text-align: center; color: var(--muted-foreground); overflow: hidden; }
+.kit-cover--lg { border-radius: var(--radius-lg); }
+.kit-cover-title { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 15px; line-height: 1.25; letter-spacing: .02em; }
+.kit-cover--lg .kit-cover-title { font-size: 22px; }
+.kit-avail-dot { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 9999px; background: var(--availability); box-shadow: 0 0 0 2px rgba(255,255,255,.25); }
+.kit-avail-dot--off { background: var(--muted-foreground); opacity: .3; box-shadow: none; }
+.kit-bookcard-meta { padding: 12px; }
+.kit-bookcard-title { margin: 0; font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--foreground); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.kit-bookcard:hover .kit-bookcard-title { color: var(--primary); }
+.dark .kit-bookcard:hover .kit-bookcard-title { color: var(--foreground); }
+.kit-bookcard-auth { margin: 2px 0 0; font-size: 12px; color: var(--muted-foreground); }
+.kit-genre-chip { display: inline-block; margin-top: 6px; padding: 1px 8px; border-radius: 9999px; background: var(--secondary); color: var(--secondary-foreground); font-size: 11px; }
+.kit-owner { margin: 4px 0 0; font-size: 12px; color: var(--muted-foreground); }
+
+/* Book grid --------------------------------------------------------- */
+.kit-bookgrid { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 640px) { .kit-bookgrid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .kit-bookgrid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { .kit-bookgrid { grid-template-columns: repeat(5, 1fr); } }
+
+/* Filters ----------------------------------------------------------- */
+.kit-filters { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 640px) { .kit-filters { flex-direction: row; } }
+.kit-filters-search { position: relative; flex: 1; min-width: 0; }
+.kit-filters .kit-select { flex-shrink: 0; width: auto; min-width: 160px; }
+.kit-filters-search [data-lucide] { position: absolute; top: 10px; left: 10px; color: var(--muted-foreground); pointer-events: none; }
+.kit-filters-search .kit-input { padding-left: 34px; }
+
+/* Empty state ------------------------------------------------------- */
+.kit-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 0; text-align: center; gap: 6px; }
+
+/* Card / utility ---------------------------------------------------- */
+.kit-card { background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.kit-pad-4 { padding: 16px; }
+
+/* Banners ----------------------------------------------------------- */
+.kit-banner { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: var(--radius-md); font-size: 14px; }
+.kit-banner--success { background: color-mix(in oklch, var(--success) 15%, var(--background)); color: var(--foreground); }
+.kit-banner--error { background: color-mix(in oklch, var(--destructive) 10%, var(--background)); color: var(--destructive); }
+.kit-banner--info { background: color-mix(in oklch, var(--primary) 5%, var(--background)); color: var(--foreground); border: 1px solid color-mix(in oklch, var(--primary) 20%, var(--background)); }
+.dark .kit-banner--info { background: color-mix(in oklch, var(--foreground) 5%, transparent); }
+
+/* Auth pages -------------------------------------------------------- */
+.kit-auth { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.kit-auth-head { text-align: center; }
+.kit-auth-foot { display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
+
+/* Book detail ------------------------------------------------------- */
+.kit-detail { max-width: 960px; margin: 0 auto; }
+.kit-detail-grid { display: grid; gap: 32px; grid-template-columns: 300px 1fr; }
+@media (max-width: 768px) { .kit-detail-grid { grid-template-columns: 1fr; } }
+.kit-detail-cover { aspect-ratio: 2/3; overflow: hidden; border-radius: var(--radius-lg); }
+.kit-detail-info { display: flex; flex-direction: column; gap: 16px; }
+.kit-detail-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* My Library overlay ------------------------------------------------ */
+.kit-mylib-cell { position: relative; }
+.kit-mylib-overlay { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; border-top: 1px solid var(--border); background: color-mix(in oklch, var(--card) 90%, transparent); backdrop-filter: blur(4px); }
+.kit-checkbox { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--foreground); cursor: pointer; }
+.kit-checkbox input { width: 13px; height: 13px; }
+.kit-delete { background: transparent; border: 0; color: var(--destructive); font-size: 12px; cursor: pointer; opacity: 0; transition: opacity 120ms; font-family: inherit; }
+.kit-mylib-cell:hover .kit-delete { opacity: 1; }
+.kit-delete:hover { text-decoration: underline; }
+
+/* Borrow request card ---------------------------------------------- */
+.kit-req-list { display: flex; flex-direction: column; gap: 12px; padding-top: 16px; }
+.kit-req-card { display: flex; gap: 16px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); transition: box-shadow 150ms; }
+.kit-req-card:hover { box-shadow: var(--shadow-sm); }
+.kit-req-thumb { width: 56px; flex-shrink: 0; }
+.kit-req-thumb .kit-cover { border-radius: 6px; aspect-ratio: 2/3; }
+.kit-req-thumb .kit-cover-title { font-size: 10px; line-height: 1.15; }
+.kit-req-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.kit-req-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.kit-req-title { font-size: 14px; font-weight: 500; color: var(--foreground); }
+.kit-req-msg { margin: 0; font-size: 14px; font-style: italic; color: var(--muted-foreground); }
+.kit-req-actions { display: flex; gap: 8px; margin-top: 4px; }
+
+/* Borrow form ------------------------------------------------------- */
+.kit-bform { display: flex; flex-direction: column; gap: 16px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--card); }
+
+/* Utility for demo bar --------------------------------------------- */
+.kit-demo-bar { position: fixed; bottom: 16px; right: 16px; display: flex; gap: 8px; background: var(--card); border: 1px solid var(--border); padding: 8px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); font-size: 12px; z-index: 10; }

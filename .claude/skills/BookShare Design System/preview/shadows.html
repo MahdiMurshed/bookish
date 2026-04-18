@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:var(--muted);color:var(--foreground)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;font-family:var(--font-mono);font-size:11px}
+.box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;flex-direction:column;gap:6px;height:80px}
+.box.xs{box-shadow:var(--shadow-xs)}
+.box.sm{box-shadow:var(--shadow-sm)}
+.box.md{box-shadow:var(--shadow-md)}
+.name{font-weight:600;font-family:var(--font-sans);font-size:12px}
+.val{color:var(--muted-foreground);font-size:10px}
+</style></head><body>
+<div class="grid">
+  <div class="box xs"><span class="name">shadow-xs</span><span class="val">inputs, buttons</span></div>
+  <div class="box sm"><span class="name">shadow-sm</span><span class="val">card hover</span></div>
+  <div class="box md"><span class="name">shadow-md</span><span class="val">rarely used</span></div>
+</div>
+</body></html>
