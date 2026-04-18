@@ -1,15 +1,20 @@
 import { Badge } from '@repo/ui/components/badge';
-import { ArrowRightLeft, BookOpen, Library, User } from 'lucide-react';
+import { ArrowRightLeft, BookOpen, Library, Mail, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNotificationSubscription, useUnreadCount } from '@/hooks/useNotifications';
+import {
+  useNotificationSubscription,
+  useUnreadMessageCount,
+  useUnreadRequestCount,
+} from '@/hooks/useNotifications';
 
 export function Header() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   useNotificationSubscription();
-  const { data: unreadCount } = useUnreadCount();
+  const { data: unreadRequests } = useUnreadRequestCount();
+  const { data: unreadMessages } = useUnreadMessageCount();
 
   const handleSignOut = async () => {
     await signOut();
@@ -47,8 +52,18 @@ export function Header() {
               >
                 <ArrowRightLeft className="h-4 w-4" />
                 Requests
-                {!!unreadCount && (
-                  <Badge className="ml-0.5 h-4 min-w-4 px-1 text-[10px]">{unreadCount}</Badge>
+                {!!unreadRequests && (
+                  <Badge className="ml-0.5 h-4 min-w-4 px-1 text-[10px]">{unreadRequests}</Badge>
+                )}
+              </Link>
+              <Link
+                to="/messages"
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+              >
+                <Mail className="h-4 w-4" />
+                Messages
+                {!!unreadMessages && (
+                  <Badge className="ml-0.5 h-4 min-w-4 px-1 text-[10px]">{unreadMessages}</Badge>
                 )}
               </Link>
               <Link
