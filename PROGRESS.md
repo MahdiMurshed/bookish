@@ -10,7 +10,8 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - [x] **Phase 3: Borrowing** — api-client borrowRequests + notifications, useBorrowRequests hooks, BookDetail page (request form), Requests inbox page
 - [x] **Phase 4: Chat** — per-request chat (messages), Realtime delivery, optimistic updates, mark-read, notifications. Reviews/profile/home moved to Phase 4.5.
 - [ ] **Phase 4.5: Reviews + Profile + Home** — reviews (create after return + getForBook), Profile page (edit + stats), Home landing page (hero + community stats)
-- [ ] **Phase 5: Polish + Deploy** — responsive design, loading/error/empty states, auth error handler, book delete guard, Vercel SPA rewrites, api-client unit tests, CLAUDE.md
+- [x] **Phase 5: Messages & Notifications UX** — dedicated `/messages` route (inbox + thread + composer) replacing the per-book embedded chat, header Mail nav + typed unread-message badge, cross-page sonner toast, role-aware quick-action bar, mobile single-column layout, plus two RLS fixes (messages_update policy + column-scoped UPDATE grants on messages and notifications).
+- [ ] **Phase 6: Polish + Deploy** — loading/error/empty states polish, auth error handler, book delete guard, Vercel SPA rewrites, api-client unit tests, CLAUDE.md. (Was "Phase 5: Polish + Deploy" in the original plan; responsive design landed with Phase 5's mobile pass.)
 
 ## Key Decisions
 - Email/password auth (not magic link)
@@ -23,7 +24,24 @@ Design doc: `~/.gstack/projects/bookish/mahdimurshed-unknown-design-20260404-054
 - Home landing page included
 
 ## Current Status
-**Phase 4 COMPLETE.** Branch: phase-4/social (PR #7, all review fixes verified)
+**Phase 5 COMPLETE.** Branch: phase-5/messages (PR #9, two rounds of Claude review verified).
+
+### Phase 5 Deliverables (Messages & Notifications UX)
+- Plan: `~/.claude/plans/spicy-prancing-wadler.md`. Handoff: `~/Downloads/design_handoff_messages 2/`.
+- 8 implementation phases (A–H) shipped as separate commits with approval between each, plus 2 review rounds and 1 dogfooding fix batch.
+- api-client: `getThreads` + `getThread` client-side projection over `borrow_requests × books × users × messages` (single PostgREST embed call, RLS-scoped, no DB migration for the projection itself). Extended `markMessagesAsRead` to dual-write `messages.read` + matching `new_chat_message` `notifications.read`. Added `getUnreadCountByTypes` helper. New `Thread` / `ThreadBook` / `ThreadLastMessage` types.
+- hooks: `useThreads` / `useThread`. Refactored `useNotifications.tsx` — typed `useUnreadMessageCount` / `useUnreadRequestCount`, consolidated subscription handler that invalidates threads + messages + notifications AND fires the cross-page toast from a single realtime channel (merged from a broken two-channel setup that crashed /messages at mount).
+- lib helpers: `avatarPalette.ts` (deterministic book-id → bg/fg pair, 10-pair palette mirrored from handoff), `threadSystemEvents.ts` (derive "Status changed to …" events from `borrow_requests` timestamps without a schema change), `threadTimeline.ts` (merge synthetic opening bubble + real messages + system events, chronological sort, date headers on day boundaries, showTimestamp precomputation).
+- UI primitives: added shadcn `avatar`, `card`, `scroll-area`, `separator`, `sonner` to `@repo/ui`.
+- pages: `/messages` and `/messages/:threadId` routes (React Router, under existing `ProtectedRoute`). Mounted `<Toaster />` at App root.
+- components: `Messages/Inbox/{InboxList,ConversationRow,statusBadge}` — unread-tinted rows, search filter, avatars with book-derived palette + green unread dot, status badges, unread count pills. `Messages/Thread/{ThreadPanel,ThreadHeader,MessagesList,MessageBubble,Composer,SystemEvent,EmptyThread,QuickActions}` — mini book cover with `BookOpen` fallback, me-vs-them bubble tails, sender-run-aware timestamps, role-aware Approve/Deny/Mark Handed Over/Mark Returned bar wired to existing borrow-request mutations with `toast.error` on failure. `Toast/NewMessageToast` — 340px card with sibling-button layout (no nested interactive elements).
+- Mobile ≤768px: two-column grid collapses to single column, ThreadHeader gets a mobile-only `ArrowLeft` back button.
+- Header: `Mail` nav item between Requests and Profile driven by `useUnreadMessageCount`; repointed Requests badge to `useUnreadRequestCount` so each surface counts only its own notifications.
+- Legacy removed: `ChatThread.tsx` and the old `Messages/MessageBubble.tsx`. `BookDetail` and `BorrowRequestCard` now link to `/messages/<requestId>` instead of embedding chat.
+- Migrations: 004 (`messages_update` RLS policy — had been missing since Phase 3, silently broke `markMessagesAsRead` in production), 005 (column-scoped `UPDATE(read)` on messages), 006 (column-scoped `UPDATE(read)` on notifications mirroring 005 after round-2 review). All three applied to remote Supabase; `supabase migration list` shows 001–006 tracked Local | Remote.
+- Tests: 48 total. `packages/api-client`: projection shape, markMessagesAsRead dual-write lockstep, auth guard. `apps/web`: palette determinism + initials, system events derivation, timeline builder (synthetic bubble + sender runs + date headers), inbox filter, exhaustive status badge mapping, pickQuickAction role/status matrix. Vitest now configured in both packages.
+- TODOS.md: deferred pagination, virtualization, hook-level tests, typing indicators, attachments, archived filter, toast stacking, 99+ badge cap, React Router pathname ref.
+- Review history: `/plan-eng-review` ran at plan time (4 issues raised, all resolved in the plan before implementation). Two `/review` passes during implementation (4 auto-fixes + 1 deferred). Two Claude GitHub review rounds on PR #9 (5 findings round 1 → 4 fixed + 1 deferred; 1 nit round 2 → fixed).
 
 ### Phase 4 Deliverables (Chat)
 - api-client: messages.ts (getMessagesByRequest, sendMessage with createNotification side-effect, subscribeToMessages with refetch fallback, markMessagesAsRead) + createNotification helper on notifications.ts
