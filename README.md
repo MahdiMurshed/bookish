@@ -32,9 +32,10 @@ pnpm install
 cp apps/web/.env.example apps/web/.env.local
 # Edit .env.local with your Supabase URL and anon key
 
-# Run the database migration
-# Go to Supabase Dashboard > SQL Editor
-# Paste and run: supabase/migrations/001_initial_schema.sql
+# Apply database migrations (requires supabase CLI + linked project)
+supabase link --project-ref <your-project-ref>
+supabase db push
+# Or paste supabase/migrations/*.sql files into the Supabase SQL Editor in order.
 
 # Start development
 pnpm dev
@@ -64,7 +65,7 @@ All database calls go through `@repo/api-client`. Never import Supabase directly
 - Personal book library with Google Books search
 - Community bookshelf (browse all lendable books)
 - Borrow request workflow (request, approve, hand over, return)
-- Per-request chat between borrower and owner
+- Dedicated Messages surface: two-column inbox + thread view with realtime delivery, cross-page new-message toast, and role-aware quick actions inside the thread
 - Book reviews and ratings
 - Dark mode
 

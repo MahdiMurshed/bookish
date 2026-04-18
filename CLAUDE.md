@@ -19,9 +19,9 @@ Turborepo monorepo with pnpm workspaces.
 apps/web/              → React 19 + Vite 7 + TypeScript
 packages/api-client/   → Supabase abstraction layer (all DB calls go through here)
 packages/shared/       → Zod schemas, constants, types
-packages/ui/           → shadcn/ui components + Tailwind CSS 4
+packages/ui/           → shadcn/ui components + Tailwind CSS 4 (Button, Badge, Input, Label, Tabs, Textarea, Avatar, Card, ScrollArea, Separator, Sonner)
 packages/typescript-config/
-supabase/migrations/   → SQL migrations (run with /migrate or manually in Supabase SQL Editor)
+supabase/migrations/   → SQL migrations. Apply remotely with `supabase db push` (project is linked + tracking table synced through 006). Local Supabase runs via `supabase start`.
 ```
 
 ## Rules
@@ -67,21 +67,30 @@ supabase/migrations/   → SQL migrations (run with /migrate or manually in Supa
 6 tables: `users`, `books`, `borrow_requests`, `messages`, `reviews`, `notifications`.
 Single community model (all users share one space). Multi-club is V2.
 
-Migration: `supabase/migrations/001_initial_schema.sql`
-Run in Supabase SQL Editor (not automated).
+Migrations live in `supabase/migrations/`:
+- `001_initial_schema.sql` — tables, RLS, triggers, indexes
+- `002_notification_insert_policy.sql` — allows clients to insert their own `new_chat_message` notifications
+- `003_realtime_publication.sql` — adds `messages` and `notifications` to `supabase_realtime`
+- `004_messages_update_policy.sql` — participant-scoped UPDATE on messages (mark-read)
+- `005_messages_update_column_grant.sql` — narrow the messages UPDATE grant to `read` column only
+- `006_notifications_update_column_grant.sql` — same column-scoping for notifications
+
+Apply via `supabase db push` (project is linked, tracking table is synced through 006). New migrations get a monotonically numbered filename and push with one command.
 
 ## Build Phases
 
-See `PROGRESS.md` for current status and what's done/remaining.
+See `PROGRESS.md` for current status and what's done/remaining. Deferred work (pagination, typing indicators, hook-level tests, etc.) lives in `TODOS.md` with what/why/context/depends-on per item.
 
 ## Testing
 
 ```bash
-pnpm --filter @repo/api-client test          # unit tests
+pnpm --filter @repo/api-client test          # api-client unit tests (projection, dual-write, auth)
 pnpm --filter @repo/api-client test:coverage  # with coverage
+pnpm --filter web test                        # web unit tests (palette, timeline, inbox filter, quick-action role matrix)
+pnpm --filter web test:e2e                    # Playwright e2e against local Supabase
 ```
 
-Framework: Vitest. Tests in `packages/api-client/src/__tests__/`.
+Framework: Vitest for unit tests (both `packages/api-client/src/__tests__/` and `apps/web/src/**/__tests__/`). Playwright for e2e (`apps/web/e2e/`).
 
 ## Session Continuity
 
