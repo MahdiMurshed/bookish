@@ -131,10 +131,13 @@ export function useNotificationSubscription() {
         queryClient.invalidateQueries({ queryKey: notificationKeys.all });
 
         try {
+          // 5s staleTime: fresh enough that the toast reflects the arriving
+          // message, but a burst of incoming messages coalesces into a single
+          // round-trip instead of hammering getThread per notification.
           const thread = await queryClient.fetchQuery({
             queryKey: threadKeys.detail(requestId),
             queryFn: () => getThread(requestId, user.id),
-            staleTime: 0,
+            staleTime: 5_000,
           });
           if (thread) {
             toast.custom(
