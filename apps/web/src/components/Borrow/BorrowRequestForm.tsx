@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { CreateBorrowRequestFormValues } from '@repo/shared';
-import { createBorrowRequestSchema } from '@repo/shared';
+import { borrowRequestFormSchema } from '@repo/shared';
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
@@ -23,7 +23,7 @@ export function BorrowRequestForm({ bookId }: BorrowRequestFormProps) {
     reset,
     formState: { errors },
   } = useForm<CreateBorrowRequestFormValues>({
-    resolver: zodResolver(createBorrowRequestSchema),
+    resolver: zodResolver(borrowRequestFormSchema),
     defaultValues: {
       message: '',
       due_date: '',
