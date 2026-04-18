@@ -3,10 +3,7 @@ import { ACTIVE_BORROW_STATUSES } from '@repo/api-client';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { BookOpen, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { ChatThread } from '@/components/Messages/ChatThread';
 
 import { RequestActions } from './RequestActions';
 
@@ -36,7 +33,6 @@ const STATUS_LABELS: Record<string, string> = {
 const CHAT_ENABLED_STATUSES = new Set<string>(ACTIVE_BORROW_STATUSES);
 
 export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
-  const [chatOpen, setChatOpen] = useState(false);
   const book = request.book;
   const requester = request.requester;
   const canChat = CHAT_ENABLED_STATUSES.has(request.status);
@@ -100,26 +96,15 @@ export function BorrowRequestCard({ request, role }: BorrowRequestCardProps) {
           <RequestActions requestId={request.id} status={request.status} role={role} />
 
           {canChat && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setChatOpen((open) => !open)}
-              aria-expanded={chatOpen}
-              aria-controls={`chat-thread-${request.id}`}
-            >
-              <MessageSquare className="h-4 w-4" />
-              {chatOpen ? 'Hide chat' : 'Open chat'}
+            <Button asChild variant="outline" size="sm">
+              <Link to={`/messages/${request.id}`}>
+                <MessageSquare className="h-4 w-4" />
+                Open conversation
+              </Link>
             </Button>
           )}
         </div>
       </div>
-
-      {canChat && chatOpen && (
-        <div id={`chat-thread-${request.id}`} className="mt-4">
-          <ChatThread requestId={request.id} />
-        </div>
-      )}
     </div>
   );
 }
