@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useMarkMessagesRead, useMessageSubscription, useMessages } from '@/hooks/useMessages';
 import { useThread } from '@/hooks/useThreads';
 
+import { Composer } from './Composer';
 import { EmptyThread } from './EmptyThread';
 import { MessagesList } from './MessagesList';
 import { ThreadHeader } from './ThreadHeader';
@@ -44,10 +45,13 @@ export function ThreadPanel({ threadId }: ThreadPanelProps) {
     );
   }
 
+  const counterpartyName = thread.counterparty.display_name ?? thread.counterparty.email;
+
   return (
     <div className="flex h-full flex-col">
       <ThreadHeader thread={thread} currentUserId={user.id} />
       <MessagesList thread={thread} messages={messages ?? []} currentUser={user} />
+      <Composer threadId={threadId} counterpartyName={counterpartyName} />
     </div>
   );
 }
