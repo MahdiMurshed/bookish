@@ -1,7 +1,7 @@
 import type { Thread } from '@repo/api-client';
 import { Badge } from '@repo/ui/components/badge';
-import { BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, BookOpen } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { paletteFor } from '@/lib/avatarPalette';
 
@@ -16,12 +16,22 @@ export function ThreadHeader({ thread, currentUserId }: ThreadHeaderProps) {
   const { book, counterparty, borrow_request } = thread;
   const status = statusBadgeFor(borrow_request.status);
   const palette = paletteFor(book.id);
+  const navigate = useNavigate();
 
   const amRequester = borrow_request.requester_id === currentUserId;
   const subLabel = amRequester ? 'Borrowing:' : 'Lending:';
 
   return (
     <div className="flex items-center gap-3 border-b bg-card px-5 py-3.5">
+      <button
+        type="button"
+        aria-label="Back to inbox"
+        onClick={() => navigate('/messages')}
+        className="-ml-1 flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground md:hidden"
+      >
+        <ArrowLeft className="h-[18px] w-[18px]" />
+      </button>
+
       {/* Mini book cover — real cover if present, BookOpen fallback on tinted palette. */}
       <div
         className="flex h-12 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-[4px]"
