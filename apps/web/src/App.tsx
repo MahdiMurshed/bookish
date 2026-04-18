@@ -1,3 +1,4 @@
+import { Toaster } from '@repo/ui/components/sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { Header } from '@/components/Header';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import BookDetail from '@/pages/BookDetail';
 import Browse from '@/pages/Browse';
+import Messages from '@/pages/Messages';
 import MyLibrary from '@/pages/MyLibrary';
 import Requests from '@/pages/Requests';
 import { ResetPassword } from '@/pages/ResetPassword';
@@ -123,6 +125,22 @@ function App() {
                     }
                   />
                   <Route
+                    path="/messages"
+                    element={
+                      <ProtectedRoute>
+                        <Messages />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/messages/:threadId"
+                    element={
+                      <ProtectedRoute>
+                        <Messages />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
                     path="/profile"
                     element={
                       <ProtectedRoute>
@@ -134,6 +152,7 @@ function App() {
                   />
                 </Routes>
               </main>
+              <Toaster />
             </AuthProvider>
           </BrowserRouter>
         </QueryClientProvider>
