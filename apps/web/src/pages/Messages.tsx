@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
 
 import { InboxList } from '@/components/Messages/Inbox/InboxList';
+import { ThreadPanel } from '@/components/Messages/Thread/ThreadPanel';
 
 // Two-column messages surface. Left: inbox (fixed 360px). Right: thread or
 // empty state. Wrapped by the app's standard container in App.tsx.
-// Thread content lands in Phase D.
+// Composer + quick actions land in Phase D2 / E.
 export default function Messages() {
   const { threadId } = useParams<{ threadId?: string }>();
 
@@ -23,9 +24,7 @@ export default function Messages() {
         </aside>
 
         <section className="hidden h-[calc(100vh-14rem)] md:block">
-          <div className="flex h-full items-center justify-center p-8 text-muted-foreground text-sm">
-            {threadId ? `Thread ${threadId} (Phase D)` : 'Select a conversation to start reading.'}
-          </div>
+          <ThreadPanel threadId={threadId} />
         </section>
       </div>
     </div>
