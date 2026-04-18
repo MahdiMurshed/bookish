@@ -8,7 +8,7 @@
 
 import { createNotification } from './notifications.js';
 import { supabase } from './supabaseClient.js';
-import type { Message, MessageWithSender } from './types.js';
+import type { BorrowRequest, Message, MessageSender, MessageWithSender, Thread } from './types.js';
 
 const SENDER_SELECT = `
   *,
@@ -85,21 +85,138 @@ export async function sendMessage(requestId: string, content: string): Promise<M
 }
 
 /**
- * Mark all messages in this thread as read for the current user.
- * A message is "read" once the non-sender has seen it.
+ * Mark all messages in this thread as read for the current user, AND mark the
+ * corresponding `new_chat_message` notifications read so the header badge stays
+ * in lockstep. The two stores both back unread counts; drifting them is what
+ * causes "badge won't clear" bugs.
  */
 export async function markMessagesAsRead(requestId: string): Promise<void> {
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) throw new Error('Not authenticated');
 
-  const { error } = await supabase
+  const { error: messagesError } = await supabase
     .from('messages')
     .update({ read: true })
     .eq('borrow_request_id', requestId)
     .neq('sender_id', userData.user.id)
     .eq('read', false);
 
+  if (messagesError) throw messagesError;
+
+  // new_chat_message notifications store the borrow_request_id in reference_id
+  // (see sendMessage above). Clear them in the same logical operation.
+  const { error: notificationsError } = await supabase
+    .from('notifications')
+    .update({ read: true })
+    .eq('user_id', userData.user.id)
+    .eq('type', 'new_chat_message')
+    .eq('reference_id', requestId)
+    .eq('read', false);
+
+  if (notificationsError) throw notificationsError;
+}
+
+// ---------------------------------------------------------------------------
+// Thread projection — not a stored entity. Joins borrow_requests × books ×
+// users × messages and computes last_message + unread_count client-side.
+// RLS on borrow_requests already scopes to threads I'm a participant in, so
+// one query with embedding is enough — no filter needed, no migration needed.
+// ---------------------------------------------------------------------------
+
+const THREAD_PROJECTION = `
+  *,
+  book:books!book_id (
+    id,
+    owner_id,
+    title,
+    author,
+    cover_url,
+    owner:users!owner_id (id, email, display_name, avatar_url)
+  ),
+  requester:users!requester_id (id, email, display_name, avatar_url),
+  messages (id, sender_id, content, read, created_at)
+`;
+
+export interface ThreadRow extends BorrowRequest {
+  book: {
+    id: string;
+    owner_id: string;
+    title: string;
+    author: string;
+    cover_url: string | null;
+    owner: MessageSender;
+  };
+  requester: MessageSender;
+  messages: Array<{
+    id: string;
+    sender_id: string;
+    content: string;
+    read: boolean;
+    created_at: string;
+  }>;
+}
+
+export function projectThread(row: ThreadRow, currentUserId: string): Thread {
+  const messages = row.messages ?? [];
+  const lastMessage = messages.length
+    ? [...messages].sort((a, b) => b.created_at.localeCompare(a.created_at))[0]
+    : null;
+
+  const unread_count = messages.reduce(
+    (acc, m) => (!m.read && m.sender_id !== currentUserId ? acc + 1 : acc),
+    0,
+  );
+
+  const amRequester = row.requester_id === currentUserId;
+  const counterparty = amRequester ? row.book.owner : row.requester;
+
+  const { book, requester: _requester, messages: _messages, ...borrow_request } = row;
+  const { owner: _owner, ...bookProjection } = book;
+
+  return {
+    borrow_request,
+    book: bookProjection,
+    counterparty,
+    last_message: lastMessage
+      ? {
+          id: lastMessage.id,
+          sender_id: lastMessage.sender_id,
+          content: lastMessage.content,
+          created_at: lastMessage.created_at,
+        }
+      : null,
+    unread_count,
+    last_activity_at: lastMessage?.created_at ?? row.requested_at,
+  };
+}
+
+/**
+ * Get all threads the current user participates in, newest activity first.
+ */
+export async function getThreads(currentUserId: string): Promise<Thread[]> {
+  const { data, error } = await supabase.from('borrow_requests').select(THREAD_PROJECTION);
   if (error) throw error;
+
+  const rows = (data ?? []) as unknown as ThreadRow[];
+  return rows
+    .map((row) => projectThread(row, currentUserId))
+    .sort((a, b) => b.last_activity_at.localeCompare(a.last_activity_at));
+}
+
+/**
+ * Get a single thread by its borrow_request id.
+ */
+export async function getThread(requestId: string, currentUserId: string): Promise<Thread | null> {
+  const { data, error } = await supabase
+    .from('borrow_requests')
+    .select(THREAD_PROJECTION)
+    .eq('id', requestId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) return null;
+
+  return projectThread(data as unknown as ThreadRow, currentUserId);
 }
 
 /**

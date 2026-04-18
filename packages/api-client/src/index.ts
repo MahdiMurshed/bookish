@@ -46,6 +46,8 @@ export {
 // Messages
 export {
   getMessagesByRequest,
+  getThread,
+  getThreads,
   markMessagesAsRead,
   sendMessage,
   subscribeToMessages,
@@ -57,6 +59,7 @@ export {
   createNotification,
   getNotifications,
   getUnreadCount,
+  getUnreadCountByTypes,
   markAllNotificationsRead,
   markNotificationRead,
   subscribeToNotifications,
@@ -81,6 +84,9 @@ export type {
   Session,
   SignInCredentials,
   SignUpCredentials,
+  Thread,
+  ThreadBook,
+  ThreadLastMessage,
   UpdateBookInput,
   User,
 } from './types.js';

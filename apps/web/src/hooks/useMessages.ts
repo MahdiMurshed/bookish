@@ -144,6 +144,12 @@ export function useMarkMessagesRead() {
         if (!old) return old;
         return old.map((m) => (m.sender_id === user.id || m.read ? m : { ...m, read: true }));
       });
+
+      // markMessagesAsRead now clears matching new_chat_message notifications
+      // server-side too. Invalidate notifications + threads so both badges and
+      // the inbox unread count refresh.
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['threads'] });
     },
   });
 }
