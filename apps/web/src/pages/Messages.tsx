@@ -1,8 +1,10 @@
 import { useParams } from 'react-router-dom';
 
-// Two-column messages surface. Left: inbox list (fixed 360px). Right: thread
-// or empty state. Wrapped by the app's standard container in App.tsx.
-// Inbox + Thread content lands in Phase C and D.
+import { InboxList } from '@/components/Messages/Inbox/InboxList';
+
+// Two-column messages surface. Left: inbox (fixed 360px). Right: thread or
+// empty state. Wrapped by the app's standard container in App.tsx.
+// Thread content lands in Phase D.
 export default function Messages() {
   const { threadId } = useParams<{ threadId?: string }>();
 
@@ -16,13 +18,11 @@ export default function Messages() {
       </div>
 
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 overflow-hidden rounded-lg border bg-background md:grid-cols-[360px_1fr]">
-        <aside className="min-h-[calc(100vh-14rem)] border-b md:border-r md:border-b-0">
-          <div className="flex h-full items-center justify-center p-8 text-muted-foreground text-sm">
-            Inbox (Phase C)
-          </div>
+        <aside className="h-[calc(100vh-14rem)] border-b md:border-r md:border-b-0">
+          <InboxList activeThreadId={threadId} />
         </aside>
 
-        <section className="hidden min-h-[calc(100vh-14rem)] md:block">
+        <section className="hidden h-[calc(100vh-14rem)] md:block">
           <div className="flex h-full items-center justify-center p-8 text-muted-foreground text-sm">
             {threadId ? `Thread ${threadId} (Phase D)` : 'Select a conversation to start reading.'}
           </div>
