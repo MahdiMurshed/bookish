@@ -7,6 +7,7 @@ import { Header } from '@/components/Header';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import BookDetail from '@/pages/BookDetail';
 import Browse from '@/pages/Browse';
+import Home from '@/pages/Home';
 import Messages from '@/pages/Messages';
 import MyLibrary from '@/pages/MyLibrary';
 import Profile from '@/pages/Profile';
@@ -62,6 +63,26 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Authenticated visitors continue to land on /browse (the existing
+// post-signin destination); unauthenticated visitors get the Home landing.
+function RootRoute() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Navigate to="/browse" replace />;
+  }
+
+  return <Home />;
+}
+
 function App() {
   return (
     <ErrorBoundary>
@@ -73,7 +94,7 @@ function App() {
               <main className="container mx-auto px-4 py-8">
                 <Routes>
                   {/* Public routes */}
-                  <Route path="/" element={<Navigate to="/browse" replace />} />
+                  <Route path="/" element={<RootRoute />} />
                   <Route
                     path="/signin"
                     element={
