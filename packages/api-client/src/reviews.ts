@@ -19,9 +19,13 @@ export interface CreateReviewInput {
   content?: string;
 }
 
+// Email is intentionally excluded from this select — reviews are public on
+// the book page, and we don't want to leak reviewer email addresses to other
+// authenticated users. ReviewList falls back to "Anonymous" when display_name
+// is null.
 const REVIEWER_SELECT = `
   *,
-  reviewer:users!reviewer_id (id, email, display_name, avatar_url)
+  reviewer:users!reviewer_id (id, display_name, avatar_url)
 `;
 
 /**

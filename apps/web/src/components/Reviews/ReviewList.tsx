@@ -80,7 +80,7 @@ export function ReviewList({ bookId }: ReviewListProps) {
       ) : (
         <ul className="space-y-3">
           {list.map((r) => {
-            const name = r.reviewer.display_name || r.reviewer.email;
+            const name = r.reviewer.display_name ?? 'Anonymous';
             return (
               <li key={r.id} className="rounded-lg border bg-card p-4">
                 <div className="flex items-start gap-3">
@@ -88,9 +88,7 @@ export function ReviewList({ bookId }: ReviewListProps) {
                     {r.reviewer.avatar_url ? (
                       <AvatarImage src={r.reviewer.avatar_url} alt={name} />
                     ) : null}
-                    <AvatarFallback>
-                      {initialsFor(r.reviewer.display_name, r.reviewer.email)}
-                    </AvatarFallback>
+                    <AvatarFallback>{initialsFor(r.reviewer.display_name)}</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex flex-wrap items-center gap-2">

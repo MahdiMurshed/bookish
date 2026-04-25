@@ -90,7 +90,7 @@ export interface Review {
 }
 
 export interface ReviewWithReviewer extends Review {
-  reviewer: Pick<User, 'id' | 'email' | 'display_name' | 'avatar_url'>;
+  reviewer: Pick<User, 'id' | 'display_name' | 'avatar_url'>;
 }
 
 export interface Notification {
