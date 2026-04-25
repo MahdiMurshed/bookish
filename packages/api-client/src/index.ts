@@ -52,7 +52,6 @@ export {
   sendMessage,
   subscribeToMessages,
 } from './messages.js';
-
 // Notifications
 export type { CreateNotificationInput } from './notifications.js';
 export {
@@ -64,6 +63,14 @@ export {
   markNotificationRead,
   subscribeToNotifications,
 } from './notifications.js';
+// Reviews
+export type { CreateReviewInput } from './reviews.js';
+export {
+  createReview,
+  getMyReviewForRequest,
+  getReviewsByReviewer,
+  getReviewsForBook,
+} from './reviews.js';
 
 // Types
 export type {
@@ -81,6 +88,7 @@ export type {
   Notification,
   NotificationType,
   Review,
+  ReviewWithReviewer,
   Session,
   SignInCredentials,
   SignUpCredentials,

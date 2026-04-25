@@ -89,6 +89,10 @@ export interface Review {
   created_at: string;
 }
 
+export interface ReviewWithReviewer extends Review {
+  reviewer: Pick<User, 'id' | 'email' | 'display_name' | 'avatar_url'>;
+}
+
 export interface Notification {
   id: string;
   user_id: string;
