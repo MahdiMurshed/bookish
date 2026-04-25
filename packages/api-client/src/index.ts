@@ -52,7 +52,6 @@ export {
   sendMessage,
   subscribeToMessages,
 } from './messages.js';
-
 // Notifications
 export type { CreateNotificationInput } from './notifications.js';
 export {
@@ -64,7 +63,14 @@ export {
   markNotificationRead,
   subscribeToNotifications,
 } from './notifications.js';
-
+// Reviews
+export type { CreateReviewInput } from './reviews.js';
+export {
+  createReview,
+  getMyReviewForRequest,
+  getReviewsByReviewer,
+  getReviewsForBook,
+} from './reviews.js';
 // Types
 export type {
   AuthUser,
@@ -81,6 +87,7 @@ export type {
   Notification,
   NotificationType,
   Review,
+  ReviewWithReviewer,
   Session,
   SignInCredentials,
   SignUpCredentials,
@@ -90,7 +97,6 @@ export type {
   UpdateBookInput,
   User,
 } from './types.js';
-
 export {
   ACTIVE_BORROW_STATUSES,
   BOOK_CONDITIONS,
@@ -98,3 +104,6 @@ export {
   BORROW_REQUEST_STATUSES,
   NOTIFICATION_TYPES,
 } from './types.js';
+// Users
+export type { CommunityStats, UpdateUserInput, UserStats } from './users.js';
+export { getCommunityStats, getUser, getUserStats, updateUser } from './users.js';

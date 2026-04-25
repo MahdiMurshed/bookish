@@ -1,9 +1,11 @@
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
+import { Separator } from '@repo/ui/components/separator';
 import { BookOpen, MessageSquare } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 import { BorrowRequestForm } from '@/components/Borrow/BorrowRequestForm';
+import { ReviewList } from '@/components/Reviews/ReviewList';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBookDetail } from '@/hooks/useBooks';
 import { useActiveRequestForBook } from '@/hooks/useBorrowRequests';
@@ -26,7 +28,7 @@ export default function BookDetail() {
   const canRequest = !isOwner && book.is_lendable && !activeRequest && !activeRequestError;
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-4xl space-y-8">
       <div className="grid gap-8 md:grid-cols-[300px_1fr]">
         {/* Cover */}
         <div className="aspect-[2/3] overflow-hidden rounded-lg bg-muted">
@@ -122,6 +124,10 @@ export default function BookDetail() {
           )}
         </div>
       </div>
+
+      <Separator />
+
+      <ReviewList bookId={book.id} />
     </div>
   );
 }
