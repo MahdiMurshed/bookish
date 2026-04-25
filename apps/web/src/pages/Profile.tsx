@@ -68,8 +68,8 @@ export default function Profile() {
               }}
               onSubmit={async (values) => {
                 await updateUser.mutateAsync({
-                  display_name: values.display_name.trim(),
-                  bio: values.bio?.trim() || null,
+                  display_name: values.display_name,
+                  bio: values.bio || null,
                 });
                 setEditing(false);
               }}

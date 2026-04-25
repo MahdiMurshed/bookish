@@ -19,7 +19,7 @@ export const userKeys = {
 
 export function useUserProfile(userId: string | undefined) {
   return useQuery<User>({
-    queryKey: userId ? userKeys.profile(userId) : ['user', 'profile', 'none'],
+    queryKey: userKeys.profile(userId ?? ''),
     queryFn: () => getUser(userId!),
     enabled: !!userId,
   });
@@ -27,7 +27,7 @@ export function useUserProfile(userId: string | undefined) {
 
 export function useUserStats(userId: string | undefined) {
   return useQuery<UserStats>({
-    queryKey: userId ? userKeys.stats(userId) : ['user', 'stats', 'none'],
+    queryKey: userKeys.stats(userId ?? ''),
     queryFn: () => getUserStats(userId!),
     enabled: !!userId,
   });

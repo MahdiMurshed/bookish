@@ -1,5 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type CreateReviewFormValues, reviewFormSchema } from '@repo/shared';
+import {
+  type CreateReviewFormValues,
+  REVIEW_CONTENT_MAX,
+  reviewFormSchema,
+} from '@repo/shared';
 import { Button } from '@repo/ui/components/button';
 import { Card } from '@repo/ui/components/card';
 import { Label } from '@repo/ui/components/label';
@@ -106,9 +110,21 @@ export function ReviewForm({
         </fieldset>
 
         <div className="space-y-1">
-          <Label htmlFor="review-content" className="text-sm">
-            Notes <span className="text-muted-foreground">(optional)</span>
-          </Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="review-content" className="text-sm">
+              Notes <span className="text-muted-foreground">(optional)</span>
+            </Label>
+            <span
+              className={`text-xs tabular-nums ${
+                (watch('content')?.length ?? 0) > REVIEW_CONTENT_MAX
+                  ? 'text-destructive'
+                  : 'text-muted-foreground'
+              }`}
+              aria-live="polite"
+            >
+              {watch('content')?.length ?? 0}/{REVIEW_CONTENT_MAX}
+            </span>
+          </div>
           <Textarea
             id="review-content"
             rows={3}
