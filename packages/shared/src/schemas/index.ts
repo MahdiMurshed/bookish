@@ -6,3 +6,5 @@ export type { SendMessageFormValues } from './message.js';
 export { sendMessageSchema } from './message.js';
 export type { CreateReviewFormValues } from './review.js';
 export { createReviewSchema, reviewFormSchema } from './review.js';
+export type { UpdateUserFormValues } from './user.js';
+export { updateUserSchema } from './user.js';
