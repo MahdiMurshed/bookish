@@ -9,6 +9,7 @@ import BookDetail from '@/pages/BookDetail';
 import Browse from '@/pages/Browse';
 import Messages from '@/pages/Messages';
 import MyLibrary from '@/pages/MyLibrary';
+import Profile from '@/pages/Profile';
 import Requests from '@/pages/Requests';
 import { ResetPassword } from '@/pages/ResetPassword';
 import { SignIn } from '@/pages/SignIn';
@@ -144,9 +145,7 @@ function App() {
                     path="/profile"
                     element={
                       <ProtectedRoute>
-                        <div className="text-center text-muted-foreground">
-                          Profile coming in Phase 4
-                        </div>
+                        <Profile />
                       </ProtectedRoute>
                     }
                   />
