@@ -34,9 +34,24 @@ describe('pickQuickAction', () => {
     expect(pickQuickAction('handed_over', true, false)).toBeNull();
   });
 
-  // Terminal states — no bar regardless of role
+  // Returned: requester gets the write-review CTA until they have reviewed.
+  it('requester on returned + !hasReviewed → write-review with "How was it?" label', () => {
+    const action = pickQuickAction('returned', false, true, false);
+    expect(action?.kind).toBe('write-review');
+    expect(action?.label).toBe('How was it?');
+  });
+
+  it('requester on returned + hasReviewed → null (already reviewed)', () => {
+    expect(pickQuickAction('returned', false, true, true)).toBeNull();
+  });
+
+  it('owner on returned → null regardless of hasReviewed', () => {
+    expect(pickQuickAction('returned', true, false, false)).toBeNull();
+    expect(pickQuickAction('returned', true, false, true)).toBeNull();
+  });
+
+  // Other terminal states — no bar regardless of role.
   it.each<BorrowRequestStatus>([
-    'returned',
     'denied',
     'cancelled',
   ])('terminal status %s → null for owner', (status) => {
@@ -44,7 +59,6 @@ describe('pickQuickAction', () => {
   });
 
   it.each<BorrowRequestStatus>([
-    'returned',
     'denied',
     'cancelled',
   ])('terminal status %s → null for requester', (status) => {
